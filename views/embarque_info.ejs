@@ -1,0 +1,56 @@
+<% include ./static/header %>
+<% include ./static/sidebar %>
+<% include ./static/navbar %>
+
+
+<div class="col-md-10 col-lg-10-2 col-xl-11">
+    <div class="row">
+        <div class="box-header col-lg-6">
+            <br>
+            <h3 class="box-title">Embarque: #<%=idembarque%> </h3>
+
+
+
+        </div>
+    </div>
+
+
+</div>
+<br>
+<div class="table-responsive">
+    <div class="containerTable">
+        <!-- /.box-header -->
+        <div class="table table-responsive" id="table">
+            <table id="myTable" class="table table-bordered table-striped">
+                <thead class="thead-dark">
+
+                    <th><span class="icoSidebar fas fa-history"></span> Numero Parte</th>
+                    <th><span class="icoSidebar fas fa-history"></span> Destino</th>
+                    <th><span class="icoSidebar fas fa-hashtag"></span> Cantidad</th>
+
+                </thead>
+
+                <tbody>
+                    <%if(data) { %>
+                    <% for (var i = 0; i < data.length; i++) { %>
+
+                    <tr class="table_roww">
+
+                        <td class="table_id" width='10%'><%=data[i].programa_parte%></td>
+                        <td width='10%'><%=data[i].programa_destino%></td>
+                        <td width='10%'><%=data[i].programa_cant%></td>
+
+
+                    </tr>
+                    <% } %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<% include ./static/footer %>
+</div>
+</body>
+
+</html>

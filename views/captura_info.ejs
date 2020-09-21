@@ -1,0 +1,68 @@
+<% include ./static/header %>
+<% include ./static/sidebar %>
+<% include ./static/navbar %>
+
+
+<div class="col-md-10 col-lg-10-2 col-xl-11">
+    <div class="row">
+        <div class="box-header col-lg-6">
+            <br>
+            <h3 class="box-title">Captura: #<%=idembarque%> </h3>
+
+
+
+        </div>
+    </div>
+
+
+</div>
+<br>
+<div class="table-responsive">
+    <div class="containerTable">
+        <!-- /.box-header -->
+        <div class="table table-responsive" id="table">
+            <table id="myTable" class="table table-bordered table-striped table-sm">
+                <thead class="thead-dark">
+
+                    <th><span class="icoSidebar fas fa-history"></span> Numero Parte</th>
+                    <th><span class="icoSidebar fas fa-hashtag"></span> Cantidad</th>
+                    <th><span class="icoSidebar fas fa-history"></span> Serial</th>
+                    <th><span class="icoSidebar fas fa-history"></span> Empleado</th>
+                    <th><span class="icoSidebar fas fa-info-circle"></span>Fecha</th>
+
+                </thead>
+
+                <tbody>
+                    <%if(data) { %>
+                    <% for (var i = 0; i < data.length; i++) { %>
+
+                        <%
+                let date = data[i].captura_fecha
+                date.setHours(date.getHours()-6);
+                var myDate_string = date.toISOString();
+                var myDate_string = myDate_string.replace("T","  Hora: ");               
+                var myDate_string = myDate_string.substring(0, myDate_string.length-5);
+                %>
+
+                    <tr class="table_roww">
+
+                        <td class="table_id" width='5%'><%=data[i].captura_parte%></td>
+                        <td width='5%'><%=data[i].captura_cant%></td>
+                        <td width='5%'><%=data[i].captura_serial%></td>
+                        <td width='10%'><%=data[i].captura_emp%></td>
+                        <td width='10%'><%= myDate_string %></td>
+
+
+                    </tr>
+                    <% } %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<% include ./static/footer %>
+</div>
+</body>
+
+</html>

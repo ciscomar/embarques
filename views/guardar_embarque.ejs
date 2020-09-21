@@ -1,0 +1,48 @@
+<% include ./static/header %>
+<% include ./static/sidebar %>
+<% include ./static/navbar %>
+
+<div class="col-xl-12 jumbotron jumbotron-fluid animated bounceInDown">
+    <div class="container">
+        <img src="/img/TristoneLogo.png" class="rounded mx-auto d-block" alt="Tristone Flowtech">
+        <h1 class="display-4 text-center">Embarques</h1>
+        <p class="lead text-center">Embarque creado satisfactoriamente</p>
+
+
+        <div class="card bg-light  ">
+            <div class=" card-header text-white bg-success text-center">Embarque Creado</div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <td>ID Embarque</td>
+                            <td><%= data.embarque%></td>
+                        </tr>
+                        <tr>
+                            <td>Cliente</td>
+                            <td><%= data.cliente%></td>
+                        </tr>
+                        <tr>
+                            <td>Fecha</td>
+                            <td><%= data.fecha%></td>
+                        </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, '/');
+
+    }
+
+    
+
+</script>
+<% include ./static/footer %>
+</div>
+</body>
+
+</html>

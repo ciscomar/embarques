@@ -1,0 +1,127 @@
+<% include ./static/header %>
+<% include ./static/sidebar %>
+<% include ./static/navbar %>
+
+<div class="col-md-6 col-lg-10-2">
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+                <br>
+            <h3 class="box-title">Notificar</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form action="/guardar_notificar" method="POST">
+            <div class="box-body">
+
+                <div class="form-group">
+                    <label for="Titulo">Correo:</label>
+                    <select class="form-control" name="correo" id="correo" required>
+
+                        <% for (var i = 0; i < data.length; i++) { %>
+                        <% if (data[i].emp_correo != 'NULL') { %>
+                        <option><%= data[i].emp_correo %></option>
+                        <% } %>
+                        <% } %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Titulo">Cliente</label>
+                    <select class="form-control" name="cliente" id="cliente" required>
+                        <option>TODOS</option>
+                        <% for (var i = 0; i < data3.length; i++) { %>
+
+                        <option><%= data3[i].cliente_nombre %></option>
+       
+                        <% } %>
+                    </select>
+                </div>
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+        </form>
+    </div>
+</div>
+</div>
+<!-- /.box -->
+
+<!-- /.box ------------------------------------------------------>
+
+<div class="col-md-10 col-lg-10-2 col-xl-11">
+    <div class="box-header">
+        <h4 class="box-title mt-5">Notificaciones</h4>
+    </div>
+
+
+    <!-- /.box-header -->
+    <div class="table table-responsive" id="table">
+        <table id="myTable2" class="table table-bordered table-striped">
+            <thead class="thead-dark">
+
+                <th>Eliminar</th>
+                <th>Correo</th>
+                <th>Cliente</th>
+
+
+
+            </thead>
+
+            <tbody>
+                <%if(data2) { %>
+                    <% for (var i = 0; i < data2.length; i++) { %>
+                <tr class="table_roww">
+
+                    <td>
+                        <form method="POST">
+
+
+                            <button name="correo" type="submit" formaction="/eliminar_notificar"
+                                class="btn btn-danger">Eliminar</button>
+                                <input type="text" name="idnot" value="<%= data2[i].not_id%>" hidden>
+                        </form>
+                    </td>
+
+                        <td><%= data2[i].not_correo%></td>
+                        <td><%= data2[i].not_cliente%></td>
+
+                    
+                </tr>
+                <% } %>
+                <% } %>
+            </tbody>
+        </table>
+
+        <% include ./static/footer %>
+    </div>
+    <!-- /.box ------------------------------------------------------>
+
+    </body>
+
+    </html>
+
+
+    <script>
+
+        $('#myTable2').dataTable({
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+
+            "pageLength" : 7,
+            "ordering": false,
+            "bPaginate": true,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false,
+            "bAutoWidth": false,
+            responsive: true,
+            rowGroup: {
+                dataSrc: 'group'
+            },
+            rowReorder: true,
+            select: true,
+            autoFill: true
+
+
+        });
+    </script>

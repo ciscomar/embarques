@@ -1,0 +1,1191 @@
+<% include ./static/header %>
+<% include ./static/sidebar %>
+<% include ./static/navbar %>
+
+
+<div class="col-md-10 col-lg-10-2 col-xl-11">
+    <div class="row">
+        <div class="box-header col-lg-6">
+            <br>
+            <h3 class="box-title">Capturar Embarque: #<%=data[0].programa_embarque%> </h3>
+
+
+        </div>
+    </div>
+
+
+</div>
+<div class="col-xl-12 jumbotron jumbotron-fluid">
+
+    <div class="container">
+        <img src="/img/tristone_logo_head.png" class="rounded mx-auto d-block animated bounceInDown"
+            alt="Tristone Flowtech">
+        <div class="col-lg-12">
+
+            <form action="/" method="POST">
+                <div class="col-lg-12">
+                    <div class="alert alert-warning text-center mt-1 animated pulse infinite" id='cerrarAlert' hidden>
+                        <button formAction="/cierre_directo" type="submit" class="btn btn-warning btn-block">
+                            <span class="fas fa-exclamation-triangle"></span> Cerrar Embarque</button>
+                        <input type="text" class="form-control" id="embarque" name="embarque"
+                            value="<%=data[0].programa_embarque%>" hidden>
+                    </div>
+                </div>
+            </form>
+
+            <form action="/" method="POST" id="MainForm">
+                <div class="alert alert-danger text-center mt-1" id='success-alert' role="alert" hidden>
+                    <span>Serial Ya Registrado</span>
+                </div>
+
+
+                <div class="row text-center">
+                    <div class="form-group col-lg-4">
+                        <h4>
+                            <span>Serial:
+                                <span class="badge badge-warning " id="lblserial2">
+                                    <span class="badge badge-danger fas fa-exclamation-triangle">
+                                    </span>
+                                    <span id="lblserial" style="font-size: 15px">
+
+                                    </span>
+                                </span>
+                            </span>
+                        </h4>
+                        <input type="text" class="form-control" id="serial" name="serial" value=""
+                            onkeyup="this.value = this.value.toUpperCase();" required>
+                    </div>
+
+                    <div class="form-group col-lg-4">
+                        <h4>
+                            <span>No. Parte:
+                                <span class="badge badge-warning " id="lblparte2">
+                                    <span class="badge badge-danger fas fa-exclamation-triangle">
+                                    </span>
+                                    <span id="lblparte" style="font-size: 15px">
+
+                                    </span>
+                                </span>
+                            </span>
+                        </h4>
+
+                        <input type="text" class="form-control" id="parte" name="parte" value=""
+                            onkeyup="this.value = this.value.toUpperCase();" required>
+                    </div>
+
+
+                    <div class="form-group col-lg-4">
+                        <h4>
+                            <span>Cantidad:
+                                <span class="badge badge-warning " id="lblcant2">
+                                    <span class="badge badge-danger fas fa-exclamation-triangle">
+                                    </span>
+                                    <span id="lblcant" style="font-size: 12px">
+
+                                    </span>
+                                </span>
+                            </span>
+                        </h4>
+                        <input type="text" class="form-control" id="cantidad" name="cantidad" value=""
+                            onkeyup="this.value = this.value.toUpperCase();" required>
+                    </div>
+
+
+
+                    <input type="text" class="form-control" id="empleado" name="empleado" value="<%=data2%>" hidden>
+                    <input type="text" class="form-control" id="embarque2" name="embarque2"
+                        value="<%=data[0].programa_embarque%>" hidden>
+                    <input type="text" class="form-control" id="partedestino" name="partedestino" value="" hidden>
+
+                    <button formAction="/guardar_captura" type="submit" class="btn btn-primary btn-block"
+                        id="btnguardar">
+                        Guardar</button>
+
+                    <input type="text" name="idempleado" value="<%=empleadoId%>" hidden>
+                </div>
+            </form>
+
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h3 class="modal-title " id="myModalLabel"> <span
+                                    class="text-success fas fa-plane-departure"></span> Etiqueta de Destino</h3>
+                            </h2>
+                        </div>
+
+                        <form action="/conteo_guardar" method="POST">
+                            <div class="card">
+
+                                <label class="mt-2">
+                                    <span class="badge badge-warning " id="contadorWarning" hidden>
+                                        <span class="badge badge-danger fas fa-exclamation-triangle"
+                                            style="font-size: 10px;">
+                                        </span>
+                                        <span id="contadorWarning2" style="font-size: 15px ; color:black" hidden>
+                                            Cantidad Incorrecta
+                                        </span>
+                                    </span>
+
+                                </label>
+
+                               
+
+                                    <div class="col-12 text-center">
+                       
+
+                                            <h4>
+                                                <span>Destino:
+                                                    <span class="badge badge-warning " id="lbldestino2">
+                                                        <span class="badge badge-danger fas fa-exclamation-triangle">
+                                                        </span>
+                                                        <span id="lbldestino" style="font-size: 12px">
+                    
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                            </h4>
+                         
+                                            <input type="text" class="form-control ;" name="indestino" id="indestino"
+                                                value="" required>
+                                            <br>
+                                       
+                                    </div>
+
+                                
+
+
+
+                                <div class="modal-footer">
+                                    <button formAction="/guardar_captura" type="submit"
+                                        class="btn btn-success btn-block" id="btnCapturar" disabled>Capturar</button>
+                                </div>
+
+                            </div>
+
+                            <!-- Valores de POST -->
+                            <input type="text" class="form-control" name="mparte" id="mparte" aria-describedby="helpId" value="" hidden>
+                            <input type="text" class="form-control" name="mserial" id="mserial" aria-describedby="helpId" value="" hidden>
+                            <input type="text" class="form-control" name="mcantidad" id="mcantidad" aria-describedby="helpId" value="" hidden>
+                            <input type="text" class="form-control" name="mempleado" id="mempleado" aria-describedby="helpId" value="" hidden>
+                            <input type="text" class="form-control" name="membarque2" id="membarque2" aria-describedby="helpId" value="" hidden>
+                            <input type="text" class="form-control" name="midempleado" id="midempleado" aria-describedby="helpId" value="" hidden>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+
+
+
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="table-responsive">
+    <div class="containerTable">
+        <!-- /.box-header -->
+        <div class="table table-responsive" id="table">
+            <table id="myTable" class="table table-bordered table-striped">
+                <thead class="thead-dark">
+
+                    <th><span class="icoSidebar fas fa-history"></span> Numero Parte</th>
+                    <th><span class="icoSidebar fas fa-history"></span> Destino</th>
+                    <th><span class="icoSidebar fas fa-hashtag"></span> Cantidad</th>
+                    <th><span class="icoSidebar fas fa-info-circle"></span>Capturado</th>
+
+                </thead>
+
+                <tbody>
+                    <%if(data) { %>
+                    <% for (var i = 0; i < data.length; i++) { %>
+
+                    <%
+                            if(data[i].programa_cant == data[i].programa_capt){
+                                classComplete="table-success"
+
+
+                            }else{
+
+                                classComplete= "table-light"
+                            }
+                            %>
+
+                    <tr class="table_roww">
+
+                        <td class="table_id <%=classComplete%>" width='10%'><%=data[i].programa_parte%></td>
+                        <td class="<%=classComplete%>" width='10%'><%=data[i].programa_destino%></td>
+                        <td class="<%=classComplete%>" width='10%'><%=data[i].programa_cant%></td>
+                        <td class="<%=classComplete%>" width='10%'><%=data[i].programa_capt%> /
+                            <%=data[i].programa_cant%> </td>
+
+
+
+
+                    </tr>
+                    <% } %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<% include ./static/footer %>
+</div>
+</body>
+
+</html>
+
+<script>
+
+    //TODO Revisar Serial con axios a base de datos
+    //TODO Subit forms con axios
+    //TODO Actualizar tabla con html al insertar
+    //TODO Revisar al completar todas las filas para cerrar embarque
+    //TODO Actualizar cantidades al insertar
+    //TODO Eliminar columna de capturado
+    //TODO Calcular cantidades con tabla de captura
+    //TODO guardar imagenes en tabla del D: al cerrar embarque
+
+
+    $(document).ready(function () {
+        $('#MainForm').on('submit', function (e) {
+           
+
+                if($('#partedestino').val().indexOf("FCA") != -1){
+
+                    e.preventDefault();
+                    $('#lbldestino2').hide();
+                    
+                    $('#myModal').modal('show');
+                    $('#mparte').val($('#parte').val())
+                    $('#mserial').val($('#serial').val())
+                    $('#mcantidad').val($('#cantidad').val())
+                    $('#mempleado').val($('#empleado').val())
+                    $('#membarque2').val($('#embarque2').val())
+                    $('#midempleado').val($('#idempleado').val())
+
+                }else{
+
+
+                 }
+             
+        });
+    });
+
+
+    $('#myModal').on('shown.bs.modal', function () {
+        
+        $('#indestino').focus();
+    })
+
+    $("#btnguardar").click(function () {
+       
+         document.getElementById("indestino").focus();
+    });
+
+
+    indestino.addEventListener("keyup", function (e) {
+
+        if  ( $("#cantidad").hasClass("border-dark") == true) {
+            $('#myModal').modal('hide');
+        }else{
+
+        clearTimeout(timer);
+        timer = setTimeout(destinoFunction, 100)
+        }
+
+    });
+
+
+    function destinoFunction() {
+
+
+        const destino = $('#partedestino').val();
+        rdestino=destino.split('-')[1]
+
+        if (("1L" + rdestino) == $('#indestino').val()) {
+
+
+            $('#btnCapturar').prop("disabled", false);
+            $('#lbldestino2').hide();
+
+        } else {
+            $('#btnCapturar').prop("disabled", true);
+            $('#lbldestino2').show();
+            var msgD = document.getElementById("lbldestino");
+            msgD.innerHTML = ' Incorrecto';
+            $('#indestino').val("")
+           
+        }
+
+    }
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    $(document).ready(function () {
+        w = document.getElementById("wrapper");
+        w.classList.add('toggled');
+
+        activo = <%- JSON.stringify(activos) %>;
+
+        if (activo.activos == 0) {
+            $('#cerrarAlert').removeAttr('hidden');
+            $('#btnguardar').prop("disabled", true);
+        }
+
+        $('#lblparte2').hide();
+        $('#lblserial2').hide();
+        $('#lblcant2').hide();
+        document.getElementById("serial").focus();
+    });
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    var timer = null;
+    parte.addEventListener("keyup", function (e) {
+
+        clearTimeout(timer);
+        timer = setTimeout(parteFunction, 100)
+
+    });
+
+
+    function parteFunction() {
+
+        programa = <%- JSON.stringify(data) %>;
+        var msg = document.getElementById("lblparte");
+        var parteT = document.getElementById("parte");
+        serial = <%- JSON.stringify(data3) %>;
+
+
+        if ($("#serial").hasClass("border-dark") == true || $("#cantidad").hasClass("border-dark") == true) {
+
+            $('#btnguardar').prop("disabled", true);
+
+        } else {
+
+            var idP = $('#parte').val()
+
+
+            let foundP = false;
+            if (idP != "") {
+
+                if (idP[0] == "P" || idP[0] == "p") {
+                    var id = ($('#parte').val()).substr(1)
+                    for (var i = 0; i < programa.length; i++) {
+                        if (id == programa[i].programa_parte) {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+                            foundP = true;
+                            $('#parte').val(id)
+                            $('#partedestino').val(programa[i].programa_destino)
+
+                            break;
+
+                        } else {
+
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+
+
+                        }
+                    }
+                } else {
+                    $('#lblparte2').show();
+                    $('#btnguardar').prop("disabled", true);
+                    msg.innerHTML = ' Parte Incorrecto';
+                    parteT.classList.remove('border-success');
+                    msg.classList.remove('text-success');
+                    msg.classList.add('text-dark');
+                    parteT.classList.add('border-dark');
+                    document.getElementById("parte").focus();
+                }
+
+
+                if (foundP == false) {
+
+                    $('#parte').val("");
+                    document.getElementById("parte").focus();
+                } else {
+                    document.getElementById("cantidad").focus();
+                    $('#btnguardar').prop("disabled", true);
+                }
+
+
+            }
+        }
+
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    function serialFunction() {
+        programa = <%- JSON.stringify(data) %>;
+        var parteT = document.getElementById("parte");
+
+        serial = <%- JSON.stringify(data3) %>;
+        var msg = document.getElementById("lblserial");
+        var seriali = document.getElementById("serial");
+
+        if ($("#parte").hasClass("border-dark") == true || $("#cantidad").hasClass("border-dark") == true) {
+
+            $('#btnguardar').prop("disabled", true);
+        } else {
+
+
+
+            var idS = $('#serial').val()
+
+            let foundS = false;
+            if (idS != "") {
+
+                if (idS[0] == "S" || idS[0] == "s" /*|| idS[0] == "1"*/) {
+
+                    var id = ($('#serial').val()).substr(1)
+
+
+                    // /////////////////AXIOS
+
+                    // axios.get(`/consulta_serial/${id}`)
+                    // .then((response) => {
+
+                    //     console.log(response.data)
+                    // })
+                    // .catch((error) => { console.error(error) })
+
+                    // //////////////////////
+
+
+
+                    for (var i = 0; i < serial.length; i++) {
+
+                        if (id == serial[i].captura_serial) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            foundS = true;
+                            break;
+
+                        } else {
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                        }
+
+                    }
+
+                } else {
+                    //soundWrong();
+                    $('#lblserial2').show();
+                    $('#btnguardar').prop("disabled", true);
+                    msg.innerHTML = ' Serial Incorrecto';
+                    seriali.classList.remove('border-success');
+                    msg.classList.remove('text-success');
+                    msg.classList.add('text-dark');
+                    seriali.classList.add('border-dark');
+                    foundS = true;
+
+                }
+            }
+
+            if (foundS == true) {
+
+                $('#serial').val("");
+                document.getElementById("serial").focus();
+
+
+            } else {
+                //soundOk();
+                $('#serial').val(id)
+                document.getElementById("parte").focus();
+            }
+        }
+
+        //}
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    var timerC = null;
+    cantidad.addEventListener("keyup", function (e) {
+
+        if(e.keyCode === 13){
+           e.preventDefault();
+        }else{
+
+            clearTimeout(timerC);
+        timerC = setTimeout(cantFunction, 100)
+        }
+
+    });
+
+    function cantFunction() {
+
+        if ($("#serial").hasClass("border-dark") == true || $("#parte").hasClass("border-dark") == true) {
+
+            $('#btnguardar').prop("disabled", true);
+        } else {
+
+            programa = <%- JSON.stringify(data) %>;
+            var msg = document.getElementById("lblcant");
+            var canti = document.getElementById("cantidad");
+
+            var cantidadC = $('#cantidad').val()
+            var parte = $('#parte').val();
+
+            let foundC = false;
+
+            if (cantidad != "") {
+                if (cantidadC[0] == "Q" || cantidadC[0] == "q") {
+                    var cantidad = ($('#cantidad').val()).substr(1);
+                    for (var i = 0; i < programa.length; i++) {
+
+                        if (parte == programa[i].programa_parte && cantidad <= (programa[i].programa_cant - programa[i].programa_capt)) {
+                            //soundOk();
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            canti.classList.add('border-success');
+                            foundC = true;
+                            $('#cantidad').val(cantidad)
+                            break;
+                            var delayInMilliseconds = 500;
+                            setTimeout(function () {
+
+                            }, delayInMilliseconds);
+
+                        } else {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+
+
+                        }
+                    }
+                } else {
+                    //soundWrong();
+                    
+                    $('#lblcant2').show();
+                    $('#btnguardar').prop("disabled", true);
+                    msg.innerHTML = ' Cantidad Incorrecta';
+                    canti.classList.remove('border-success');
+                    msg.classList.remove('text-success');
+                    msg.classList.add('text-dark');
+                    canti.classList.add('border-dark');
+                }
+            }
+
+            if (foundC == false) {
+                //soundOk();
+                $('#cantidad').val("");
+                document.getElementById("cantidad").focus();
+            }
+
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    $(document).ready(function () {
+        existente = <%- JSON.stringify(data7) %>;
+
+        if (existente == 'true') {
+            $('#success-alert').prop("hidden", false);
+            $("#success-alert").show()
+            setTimeout(function () {
+                $("#success-alert").slideUp(1000);
+            }, 1000);
+        }
+    });
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    let count = 0;
+    let info;
+    let infoArray = []
+    var timerNew;
+    $('#serial').keypress(function (e) {
+
+        /////////////////////////////////Revisar cada caracter y meter al arreglo
+        if (e.charCode === 29) {
+            infoArray.push(info.substring(1).toUpperCase())
+
+            count++
+            info = "";
+
+        }
+
+        info += e.key
+
+        /////////////////////////////////Despues de escanear
+
+        clearTimeout(timerNew);
+        timerNew = setTimeout(function (event) {
+            infoArray.push(info.substring(1).toUpperCase())
+
+
+            //if($('#serial').val().startsWith("s") || $('#serial').val().startsWith("S"))
+            if (!$('#serial').val().startsWith("[")) {
+                count = 0;
+                info = "";
+                infoArray = []
+         
+                serialFunction();
+
+            } else {
+
+                ///////////Master y B10 GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                var partes
+                var qty
+                var serial
+                programa = <%- JSON.stringify(data) %>;
+                var msg = document.getElementById("lblparte");
+                var parteT = document.getElementById("parte");
+                serial = <%- JSON.stringify(data3) %>;
+
+                if (infoArray.length == 9 || infoArray.length == 10) {//GM MASTER Y B10
+
+                    if (infoArray[3].startsWith("6JUN")) { //Master
+                        $('#parte').val(infoArray[1].substring(1));
+                        $('#cantidad').val(infoArray[6].substring(infoArray[6].lastIndexOf("Q") + 1, infoArray[6].lastIndexOf("PL")));
+                        $('#serial').val(infoArray[3]);
+                    } else if (infoArray[3].startsWith("1JUN")) { //B10
+                        $('#parte').val(infoArray[1].substring(1));
+                        $('#cantidad').val(infoArray[2].substring(1));
+                        $('#serial').val(infoArray[3]);
+                    }
+
+                    partes = $('#parte').val();
+                    serial = $('#serial').val();
+                    qty = $('#cantidad').val();
+
+                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                    existeParte = false;
+
+                    for (let y = 0; y < programa.length; y++) {
+
+                        if (partes == programa[y].programa_parte) {
+
+                            existeParte = true;
+                        }
+
+                    }
+
+
+
+                    if (existeParte == false) {
+                        //soundWrong();
+                        $('#lblparte2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msg.innerHTML = ' No Encontrado';
+                        parteT.classList.remove('border-success');
+                        msg.classList.remove('text-success');
+                        msg.classList.add('text-dark');
+                        parteT.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                    existeSerial = false;
+                    seriales = <%- JSON.stringify(data3) %>;
+                    var msgS = document.getElementById("lblserial");
+                    var seriali = document.getElementById("serial");
+
+                    var id = $('#serial').val();
+
+
+                    for (var i = 0; i < seriales.length; i++) {
+                        if (serial == seriales[i].captura_serial) {
+                            existeSerial = true;
+
+                        }
+                    }
+
+                    if (existeSerial == true) {
+                        //soundWrong();
+                        $('#lblserial2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msgS.innerHTML = ' Ya registrado';
+                        seriali.classList.remove('border-success');
+                        msgS.classList.remove('text-success');
+                        msgS.classList.add('text-dark');
+                        seriali.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                    existeCantidad = false
+                    programa = <%- JSON.stringify(data) %>;
+                    var msgC = document.getElementById("lblcant");
+                    var canti = document.getElementById("cantidad");
+
+                    for (var i = 0; i < programa.length; i++) {
+
+
+                        qtyInt = parseInt(qty);
+
+                        if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                            existeCantidad = true
+
+                        }
+
+
+                    }
+
+                    if (existeCantidad == true) {
+                        //soundWrong();
+                        $('#lblcant2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msgC.innerHTML = ' Cantidad Excedente';
+                        canti.classList.remove('border-success');
+                        msgC.classList.remove('text-success');
+                        msgC.classList.add('text-dark');
+                        canti.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                    p = $('#parte').val();
+                    s = $('#serial').val();
+                    c = $('#cantidad').val();
+                    if (p != "" && s != "" && c != "") {
+
+                        $('#btnguardar').prop("disabled", false);
+                        msg.innerHTML = '';
+                        $('#lblparte2').hide();
+                        parteT.classList.remove('border-dark');
+                        msg.classList.add('text-success');
+                        parteT.classList.add('border-success');
+
+
+                        $('#lblserial2').hide();
+                        $('#btnguardar').prop("disabled", false);
+                        msgS.innerHTML = '';
+                        seriali.classList.remove('border-dark');
+                        msgS.classList.add('text-success');
+                        seriali.classList.add('border-success');
+
+                        $('#lblcant2').hide();
+                        $('#btnguardar').prop("disabled", false);
+                        msgC.innerHTML = '';
+                        canti.classList.remove('border-dark');
+                        msgC.classList.add('text-success');
+                        canti.classList.add('border-success');
+
+                    }
+                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+
+
+                    ///////////Master y B10 GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+                    ///////////MIXED MASTER GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                } else if (infoArray.length == 36) {
+                    var partes = []
+                    var qty = []
+                    var serial;
+                    for (x = 0; x < infoArray.length; x++) {
+                        if (infoArray[x].startsWith("P") && infoArray[x].length > 1) {
+
+                            partes.push(infoArray[x].substring(1))
+
+                        } else if (infoArray[x].startsWith("7Q") && infoArray[x].endsWith("PL") && infoArray[x].length > 4) {
+                            qty.push(infoArray[x].substring(infoArray[x].lastIndexOf("Q") + 1, infoArray[x].lastIndexOf("PL")))
+
+                        }
+                    }
+
+                    serial = infoArray[1];
+
+
+                    $('#parte').val(partes);
+                    $('#cantidad').val(qty);
+                    $('#serial').val(serial);
+
+
+
+                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                    existeParte = false;
+                    for (let x = 0; x < partes.length; x++) {
+
+                        for (let y = 0; y < programa.length; y++) {
+
+                            if (partes[x] == programa[y].programa_parte) {
+
+                                existeParte = true;
+                            }
+
+                        }
+
+                        if (existeParte == false) {
+                            break;
+                        }
+                    }
+
+                    if (existeParte == false) {
+                        //soundWrong();
+                        $('#lblparte2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msg.innerHTML = ' No Encontrado';
+                        parteT.classList.remove('border-success');
+                        msg.classList.remove('text-success');
+                        msg.classList.add('text-dark');
+                        parteT.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                    existeSerial = false;
+                    seriales = <%- JSON.stringify(data3) %>;
+                    var msgS = document.getElementById("lblserial");
+                    var seriali = document.getElementById("serial");
+
+                    var id = $('#serial').val();
+
+
+                    for (var i = 0; i < seriales.length; i++) {
+                        if (serial == seriales[i].captura_serial) {
+                            existeSerial = true;
+
+
+                        }
+                    }
+
+                    if (existeSerial == true) {
+                        //soundWrong();
+                        $('#lblserial2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msgS.innerHTML = ' Ya registrado';
+                        seriali.classList.remove('border-success');
+                        msgS.classList.remove('text-success');
+                        msgS.classList.add('text-dark');
+                        seriali.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                    existeCantidad = false
+                    programa = <%- JSON.stringify(data) %>;
+                    var msgC = document.getElementById("lblcant");
+                    var canti = document.getElementById("cantidad");
+
+                    for (var i = 0; i < programa.length; i++) {
+
+                        for (let y = 0; y < partes.length; y++) {
+                            qtyInt = parseInt(qty[y]);
+
+                            if (partes[y] == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+                        }
+
+                    }
+
+                    if (existeCantidad == true) {
+                        //soundWrong();
+                        $('#lblcant2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msgC.innerHTML = ' Cantidad Excedente';
+                        canti.classList.remove('border-success');
+                        msgC.classList.remove('text-success');
+                        msgC.classList.add('text-dark');
+                        canti.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                    p = $('#parte').val();
+                    s = $('#serial').val();
+                    c = $('#cantidad').val();
+                    if (p != "" && s != "" && c != "") {
+
+                        $('#btnguardar').prop("disabled", false);
+                        msg.innerHTML = '';
+                        $('#lblparte2').hide();
+                        parteT.classList.remove('border-dark');
+                        msg.classList.add('text-success');
+                        parteT.classList.add('border-success');
+
+
+                        $('#lblserial2').hide();
+                        $('#btnguardar').prop("disabled", false);
+                        msgS.innerHTML = '';
+                        seriali.classList.remove('border-dark');
+                        msgS.classList.add('text-success');
+                        seriali.classList.add('border-success');
+
+                        $('#lblcant2').hide();
+                        $('#btnguardar').prop("disabled", false);
+                        msgC.innerHTML = '';
+                        canti.classList.remove('border-dark');
+                        msgC.classList.add('text-success');
+                        canti.classList.add('border-success');
+
+                    }
+                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+
+                    ///////////MIXED MASTER GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+                    ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                } else if (infoArray.length == 8) {//FORD
+                    var partes
+                    var qty
+                    var serial
+
+                    $('#parte').val(infoArray[1].substring(1));
+                    $('#cantidad').val(infoArray[2].substring(1));
+                    $('#serial').val(infoArray[7].substring(1));
+
+
+                    partes = $('#parte').val()
+                    qty = $('#cantidad').val()
+                    serial = $('#serial').val()
+
+
+
+
+                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                    existeParte = false;
+
+                    for (let y = 0; y < programa.length; y++) {
+
+                        if (partes == programa[y].programa_parte) {
+
+                            existeParte = true;
+                        }
+
+                    }
+
+
+
+                    if (existeParte == false) {
+                        //soundWrong();
+                        $('#lblparte2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msg.innerHTML = ' No Encontrado';
+                        parteT.classList.remove('border-success');
+                        msg.classList.remove('text-success');
+                        msg.classList.add('text-dark');
+                        parteT.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                    existeSerial = false;
+                    seriales = <%- JSON.stringify(data3) %>;
+                    var msgS = document.getElementById("lblserial");
+                    var seriali = document.getElementById("serial");
+
+                    var id = $('#serial').val();
+
+
+                    for (var i = 0; i < seriales.length; i++) {
+                        if (serial == seriales[i].captura_serial) {
+                            existeSerial = true;
+                        }
+                    }
+
+                    if (existeSerial == true) {
+                        //soundWrong();
+                        $('#lblserial2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msgS.innerHTML = ' Ya registrado';
+                        seriali.classList.remove('border-success');
+                        msgS.classList.remove('text-success');
+                        msgS.classList.add('text-dark');
+                        seriali.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                    existeCantidad = false
+                    programa = <%- JSON.stringify(data) %>;
+                    var msgC = document.getElementById("lblcant");
+                    var canti = document.getElementById("cantidad");
+
+                    for (var i = 0; i < programa.length; i++) {
+
+
+                        qtyInt = parseInt(qty);
+
+                        if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                            existeCantidad = true
+
+                        }
+
+
+                    }
+
+                    if (existeCantidad == true) {
+                        //soundWrong();
+                        $('#lblcant2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msgC.innerHTML = ' Cantidad Excedente';
+                        canti.classList.remove('border-success');
+                        msgC.classList.remove('text-success');
+                        msgC.classList.add('text-dark');
+                        canti.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                    p = $('#parte').val();
+                    s = $('#serial').val();
+                    c = $('#cantidad').val();
+                    if (p != "" && s != "" && c != "") {
+
+                        $('#btnguardar').prop("disabled", false);
+                        msg.innerHTML = '';
+                        $('#lblparte2').hide();
+                        parteT.classList.remove('border-dark');
+                        msg.classList.add('text-success');
+                        parteT.classList.add('border-success');
+
+
+                        $('#lblserial2').hide();
+                        $('#btnguardar').prop("disabled", false);
+                        msgS.innerHTML = '';
+                        seriali.classList.remove('border-dark');
+                        msgS.classList.add('text-success');
+                        seriali.classList.add('border-success');
+
+                        $('#lblcant2').hide();
+                        $('#btnguardar').prop("disabled", false);
+                        msgC.innerHTML = '';
+                        canti.classList.remove('border-dark');
+                        msgC.classList.add('text-success');
+                        canti.classList.add('border-success');
+
+                    }
+                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                }
+
+                ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                count = 0;
+                info = "";
+                infoArray = []
+            }
+
+        }, 100);
+
+
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

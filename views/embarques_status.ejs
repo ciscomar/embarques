@@ -1,0 +1,129 @@
+<% include ./static/header %>
+<% include ./static/sidebar %>
+<% include ./static/navbar %>
+
+
+<div class="col-md-10 col-lg-10-2 col-xl-11">
+    <div class="row">
+        <div class="box-header col-lg-6">
+            <br>
+            <h3 class="box-title">Mis Embarques</h3>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="container">
+    <div class="col-lg-12">
+
+    </div>
+
+</div>
+
+<div class="table-responsive">
+    <div class="containerTable">
+        <!-- /.box-header -->
+        <div class="table table-responsive" id="table">
+            <table id="myTable" class="table table-bordered table-striped table-sm">
+                <thead class="thead-dark">
+
+                    <th><span class="icoSidebar fas fa-history"></span> Revisar</th>
+                    <th><span class="icoSidebar fas fa-history"></span> ID Embarque</th>
+                    <th><span class="icoSidebar fas fa-hashtag"></span> Cliente </th>
+                    <th><span class="icoSidebar fas fa-info-circle"></span> Fecha</th>
+                    <th><span class="icoSidebar fas fa-info-circle"></span> Empleado</th>
+                    <th><span class="icoSidebar fas fa-info-circle"></span> Tiempo Restante</th>
+                    <th><span class="icoSidebar fas fa-info-circle"></span> Status</th>
+
+                </thead>
+
+                <tbody>
+                    <%if(data != "") { %>
+                    <% for (var i = 0; i < data.length; i++) { %>
+                    <%
+                let date = data[i].programa_fecha
+                let formatted_date =  date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() 
+
+                let endTime = new Date(data[i].programa_fecha);
+		        endTime = (Date.parse(endTime) / 1000);
+			    let now = new Date();
+			    now = (Date.parse(now) / 1000);
+			    let timeLeft = endTime - now;
+                let days = Math.floor(timeLeft / 86400);
+
+                %>
+      
+                    <% for (var y = 0; y < data2.length; y++) { %>
+                    <%if(data2[y].programa_embarque==data[i].programa_embarque) { 
+     
+                        classHide=""
+                        txtTitle="Eliminar"
+                        txtStatus="Activo"
+                        break;
+                     }else{ 
+             
+                        classHide="disabled"
+                        txtTitle="Ya Capturado"
+                        txtStatus="Capturado"
+                         } 
+                     }
+    
+                     %>
+
+                     <%if(data2=="") { 
+     
+                        classHide="disabled"
+                        txtTitle="Ya Capturado"
+                        txtStatus="Capturado"
+                     }
+    
+                     %>
+
+                    <tr class="table_roww">
+                        <td class="text-center " width='8%'>
+                            <form method="POST">
+                                <button name="equipoid" type="submit" formaction="/delete_embarque"
+                                    class="btn btn-danger text-center" data-toggle="tooltip" data-placement="left"
+                                    title="<%= txtTitle%>" <%= classHide%>><span
+                                        class="icoWhite fas fa-trash-alt"></span></button>
+                                <input type="text" name="idEmbarqueDelete" value="<%=data[i].programa_embarque%>"
+                                    hidden>
+
+                                <button name="equipoid" type="submit" formaction="/cambiar_embarque"
+                                    class="btn btn-info text-center" data-toggle="tooltip" data-placement="left"
+                                    title="Revisar"><span class="icoWhite fas fa-list-ol"></span></button>
+                                <input type="text" name="idEmbarqueInfo" value="<%=data[i].programa_embarque%>" hidden>
+
+                            </form>
+
+
+                        </td>
+                        <td class="table_id" width='10%'><%=data[i].programa_embarque%></td>
+                        <td width='10%'><%=data[i].programa_cliente%></td>
+                        <td width='10%'> <%=formatted_date%></td>
+                        <td width='10%'><%=data[i].programa_emp%></td>
+                        <%if(txtStatus=="Activo"){%>
+                        <td width='10%'>
+                            <div class="time-elapsed"></div>
+                            <div id="timer" class="date_start_time" data-date-time="<%= data[i].programa_fecha%>"></div>
+                        </td>
+                        <%}else{%>
+                        <td></td>
+                        <%}%>
+                        <td width='10%'><%=txtStatus%></td>
+
+
+                    </tr>
+                    <% } %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<% include ./static/footer %>
+</div>
+</body>
+
+</html>

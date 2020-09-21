@@ -1,0 +1,118 @@
+<% include ./static/header %>
+<% include ./static/sidebar %>
+<% include ./static/navbar %>
+
+<div class="col-md-6 col-lg-10-2">
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <br>
+            <h3 class="box-title">Programar Embarque</h3>
+            <br>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form action="/guardar_equipo" method="POST" >
+            <div class="box-body">
+                <!------->
+                <!-- Date format yyyy-m-d -->
+                <%
+                     var d = new Date();
+                     var mm = d.getMonth() + 1;
+                     var dd = d.getDate();
+                     var yy = d.getFullYear();
+                     var myDateString = yy + '-' + mm + '-' + dd; //(US)
+                     %>
+                <!------->
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <label for="Titulo">Numero Embarque: </label><label id="embarque1"></label> <label id="msg">
+                        </label>
+                        <input type="text" class="form-control" id="embarque" name="embarque" value="" onkeyup="this.value = this.value.toUpperCase();" required>
+                    </div>
+
+                    <div class="form-group col-lg-6" id='divplat'>
+                        <label for="Titulo">Cliente:</label>
+                        <select class="form-control" name="cliente" id="cliente" required>
+                            <option value="" selected>Seleccionar</option>
+                            <% for (var i = 0; i < data.length; i++) { %>
+                            <option><%= data[i].cliente_nombre %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+
+
+                    <div class="form-group col-lg-6">
+                        <label for="inlineFormInputGroup">Fecha:</label>
+                        <div class="input-group ">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><span class="fas fa-calendar"></span></div>
+                            </div>
+                            <input type="text" class="form-control" id="fecha_embarque" name="fecha_embarque"
+                                placeholder="yyyy-m-d" autocomplete="off" required>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!------->
+
+                <div class="box-footer">
+                    <button id="btnguardar" type="submit" class="btn btn-primary"
+                        onclick="$('form').attr('action', '/programar_cantidad');">Siguiente</button>
+                </div>
+        </form>
+    </div>
+    <!-- /.box -->
+
+    <% include ./static/footer %>
+</div>
+</body>
+
+</html>
+
+<script>
+
+    $('#fecha_embarque').datepicker({
+        format: "yyyy-m-d",
+        orientation: "bottom",
+        todayHighlight: true
+    });
+
+    var embarque = document.getElementById("embarque");
+    embarque.addEventListener("keyup", function (e) {
+
+        embarques = <%- JSON.stringify(data2) %>;
+        var msg = document.getElementById("msg");
+
+
+        var id = $('#embarque').val();
+
+        console.log($('#embarque').val())
+        for (var i = 0; i < embarques.length; i++) {
+            if (id == embarques[i].programa_embarque) {
+
+                $('#btnguardar').prop("disabled", true);
+                msg.innerHTML = ' Ya registrado';
+                embarque.classList.remove('border-success');
+                msg.classList.remove('text-success');
+                msg.classList.add('text-danger');
+                embarque.classList.add('border-danger');
+                break;
+
+            } else {
+
+                $('#btnguardar').prop("disabled", false);
+                msg.innerHTML = ' ';
+                embarque.classList.remove('border-danger');
+                msg.classList.add('text-success');
+                embarque.classList.add('border-success');
+            }
+        }
+
+    });
+
+</script>
