@@ -308,10 +308,10 @@
     function destinoFunction() {
 
 
-        const destino = $('#partedestino').val();
+        const destino = $('#partedestino').val().toUpperCase();
         rdestino=destino.split('-')[1]
 
-        if (("1L" + rdestino) == $('#indestino').val()) {
+        if (("1L" + rdestino) == $('#indestino').val().toUpperCase()) {
 
 
             $('#btnCapturar').prop("disabled", false);
@@ -690,8 +690,8 @@
                 var msg = document.getElementById("lblparte");
                 var parteT = document.getElementById("parte");
                 serial = <%- JSON.stringify(data3) %>;
-
-                if (infoArray.length == 9 || infoArray.length == 10) {//GM MASTER Y B10
+                console.log(infoArray)
+                if (infoArray.length == 9 || infoArray.length == 10 || infoArray.length == 11 || infoArray.length == 12) {//GM MASTER Y B10
 
                     if (infoArray[3].startsWith("6JUN")) { //Master
                         $('#parte').val(infoArray[1].substring(1));
@@ -1016,6 +1016,154 @@
                     serial = $('#serial').val()
 
 
+
+
+                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                    existeParte = false;
+
+                    for (let y = 0; y < programa.length; y++) {
+
+                        if (partes == programa[y].programa_parte) {
+
+                            existeParte = true;
+                        }
+
+                    }
+
+
+
+                    if (existeParte == false) {
+                        //soundWrong();
+                        $('#lblparte2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msg.innerHTML = ' No Encontrado';
+                        parteT.classList.remove('border-success');
+                        msg.classList.remove('text-success');
+                        msg.classList.add('text-dark');
+                        parteT.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                    existeSerial = false;
+                    seriales = <%- JSON.stringify(data3) %>;
+                    var msgS = document.getElementById("lblserial");
+                    var seriali = document.getElementById("serial");
+
+                    var id = $('#serial').val();
+
+
+                    for (var i = 0; i < seriales.length; i++) {
+                        if (serial == seriales[i].captura_serial) {
+                            existeSerial = true;
+                        }
+                    }
+
+                    if (existeSerial == true) {
+                        //soundWrong();
+                        $('#lblserial2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msgS.innerHTML = ' Ya registrado';
+                        seriali.classList.remove('border-success');
+                        msgS.classList.remove('text-success');
+                        msgS.classList.add('text-dark');
+                        seriali.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                    existeCantidad = false
+                    programa = <%- JSON.stringify(data) %>;
+                    var msgC = document.getElementById("lblcant");
+                    var canti = document.getElementById("cantidad");
+
+                    for (var i = 0; i < programa.length; i++) {
+
+
+                        qtyInt = parseInt(qty);
+
+                        if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                            existeCantidad = true
+
+                        }
+
+
+                    }
+
+                    if (existeCantidad == true) {
+                        //soundWrong();
+                        $('#lblcant2').show();
+                        $('#btnguardar').prop("disabled", true);
+                        msgC.innerHTML = ' Cantidad Excedente';
+                        canti.classList.remove('border-success');
+                        msgC.classList.remove('text-success');
+                        msgC.classList.add('text-dark');
+                        canti.classList.add('border-dark');
+                        $('#parte').val("");
+                        $('#serial').val("");
+                        $('#cantidad').val("");
+                    }
+                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                    p = $('#parte').val();
+                    s = $('#serial').val();
+                    c = $('#cantidad').val();
+                    if (p != "" && s != "" && c != "") {
+
+                        $('#btnguardar').prop("disabled", false);
+                        msg.innerHTML = '';
+                        $('#lblparte2').hide();
+                        parteT.classList.remove('border-dark');
+                        msg.classList.add('text-success');
+                        parteT.classList.add('border-success');
+
+
+                        $('#lblserial2').hide();
+                        $('#btnguardar').prop("disabled", false);
+                        msgS.innerHTML = '';
+                        seriali.classList.remove('border-dark');
+                        msgS.classList.add('text-success');
+                        seriali.classList.add('border-success');
+
+                        $('#lblcant2').hide();
+                        $('#btnguardar').prop("disabled", false);
+                        msgC.innerHTML = '';
+                        canti.classList.remove('border-dark');
+                        msgC.classList.add('text-success');
+                        canti.classList.add('border-success');
+
+                    }
+                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                }
+
+                ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+             else if (infoArray.length == 19) {//FORD
+                    var partes
+                    var qty
+                    var serial
+
+                    $('#parte').val(infoArray[1].substring(1));
+                    $('#cantidad').val(infoArray[2].substring(1));
+                    $('#serial').val(infoArray[7].substring(1));
+
+
+                    
+                    partes = $('#parte').val()
+                    qty = $('#cantidad').val()
+                    serial = $('#serial').val()
+
+                    console.log(partes)
+                    console.log(qty)
+                    console.log(serial)
 
 
                     //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
