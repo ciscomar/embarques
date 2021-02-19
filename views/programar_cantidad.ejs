@@ -156,7 +156,7 @@
                     var json_object = JSON.stringify(XL_row_object);
                     x = XL_row_object
                     for (let i = 0; i < x.length; i++) {
-                        console.log(x[i].parte.trim())
+                   
                         if (x[i].parte == undefined || x[i].cantidad == undefined || x[i].destino == undefined || x[i].cantidad == 0) {
                             $('#btnguardar').prop('disabled', true);
                             msg.innerHTML = 'Formato de Archivo Incorrecto / Incompleto o cantidades en cero';

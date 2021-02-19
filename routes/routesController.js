@@ -139,9 +139,7 @@ controller.guardar_embarque_POST = (req, res) => {
         }
     }
 
-    if (access == true) {
-
-        console.log(object[i].parte)
+    if (access == true) { 
         for (let i = 0; i < object.length; i++) {
             funcion.controllerInsertPrograma(embarque, object[i].parte.trim(), cliente, object[i].destino, object[i].cantidad, username, fecha, (err, result) => {
                 if (err) throw err;
