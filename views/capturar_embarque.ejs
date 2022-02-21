@@ -254,6 +254,7 @@
     //TODO Calcular cantidades con tabla de captura
     //TODO guardar imagenes en tabla del D: al cerrar embarque
 
+    let navegador
 
     $(document).ready(function () {
         $('#MainForm').on('submit', function (e) {
@@ -336,8 +337,13 @@
 
 
     $(document).ready(function () {
-        w = document.getElementById("wrapper");
-        w.classList.add('toggled');
+        navegador=window.navigator.platform
+
+        if(navegador.startsWith("W") || navegador.startsWith("w"))
+        {
+            w = document.getElementById("wrapper");
+            w.classList.add('toggled');
+        }
 
         activo = <%- JSON.stringify(activos) %>;
 
@@ -644,831 +650,1668 @@
 
 
 
+    navegador=window.navigator.platform
+    if (navegador.startsWith("W") || navegador.startsWith("w"))
+    {
+        //////////WINDOWS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        let count = 0;
+        let info;
+        let infoArray = []
+        var timerNew;
+        $('#serial').keypress(function (e) {
 
+            /////////////////////////////////Revisar cada caracter y meter al arreglo
+            if (e.charCode === 29) {
+                infoArray.push(info.substring(1).toUpperCase())
 
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    let count = 0;
-    let info;
-    let infoArray = []
-    var timerNew;
-    $('#serial').keypress(function (e) {
-
-        /////////////////////////////////Revisar cada caracter y meter al arreglo
-        if (e.charCode === 29) {
-            infoArray.push(info.substring(1).toUpperCase())
-
-            count++
-            info = "";
-
-        }
-
-        info += e.key
-
-        /////////////////////////////////Despues de escanear
-
-        clearTimeout(timerNew);
-        timerNew = setTimeout(function (event) {
-            infoArray.push(info.substring(1).toUpperCase())
-
-
-            //if($('#serial').val().startsWith("s") || $('#serial').val().startsWith("S"))
-            if (!$('#serial').val().startsWith("[")) {
-                count = 0;
+                count++
                 info = "";
-                infoArray = []
-         
-                serialFunction();
 
-            } else {
+            }
 
-                ///////////Master y B10 GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                var partes
-                var qty
-                var serial
-                programa = <%- JSON.stringify(data) %>;
-                var msg = document.getElementById("lblparte");
-                var parteT = document.getElementById("parte");
-                serial = <%- JSON.stringify(data3) %>;
-                console.log(infoArray)
-                if (infoArray.length == 9 || infoArray.length == 10 || infoArray.length == 11 || infoArray.length == 12) {//GM MASTER Y B10
+            info += e.key
 
-                    if (infoArray[3].startsWith("6JUN")) { //Master
-                        $('#parte').val(infoArray[1].substring(1));
-                        $('#cantidad').val(infoArray[6].substring(infoArray[6].lastIndexOf("Q") + 1, infoArray[6].lastIndexOf("PL")));
-                        $('#serial').val(infoArray[3]);
-                    } else if (infoArray[3].startsWith("1JUN")) { //B10
-                        $('#parte').val(infoArray[1].substring(1));
-                        $('#cantidad').val(infoArray[2].substring(1));
-                        $('#serial').val(infoArray[3]);
-                    }
+            /////////////////////////////////Despues de escanear
 
-                    partes = $('#parte').val();
-                    serial = $('#serial').val();
-                    qty = $('#cantidad').val();
-
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    existeParte = false;
-
-                    for (let y = 0; y < programa.length; y++) {
-
-                        if (partes == programa[y].programa_parte) {
-
-                            existeParte = true;
-                        }
-
-                    }
+            clearTimeout(timerNew);
+            timerNew = setTimeout(function (event) {
+                infoArray.push(info.substring(1).toUpperCase())
 
 
+                //if($('#serial').val().startsWith("s") || $('#serial').val().startsWith("S"))
+                if (!$('#serial').val().startsWith("[")) {
+                    count = 0;
+                    info = "";
+                    infoArray = []
+            
+                    serialFunction();
 
-                    if (existeParte == false) {
-                        //soundWrong();
-                        $('#lblparte2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msg.innerHTML = ' No Encontrado';
-                        parteT.classList.remove('border-success');
-                        msg.classList.remove('text-success');
-                        msg.classList.add('text-dark');
-                        parteT.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    existeSerial = false;
-                    seriales = <%- JSON.stringify(data3) %>;
-                    var msgS = document.getElementById("lblserial");
-                    var seriali = document.getElementById("serial");
-
-                    var id = $('#serial').val();
-
-
-                    for (var i = 0; i < seriales.length; i++) {
-                        if (serial == seriales[i].captura_serial) {
-                            existeSerial = true;
-
-                        }
-                    }
-
-                    if (existeSerial == true) {
-                        //soundWrong();
-                        $('#lblserial2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgS.innerHTML = ' Ya registrado';
-                        seriali.classList.remove('border-success');
-                        msgS.classList.remove('text-success');
-                        msgS.classList.add('text-dark');
-                        seriali.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    existeCantidad = false
-                    programa = <%- JSON.stringify(data) %>;
-                    var msgC = document.getElementById("lblcant");
-                    var canti = document.getElementById("cantidad");
-
-                    for (var i = 0; i < programa.length; i++) {
-
-
-                        qtyInt = parseInt(qty);
-
-                        if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
-
-                            existeCantidad = true
-
-                        }
-
-
-                    }
-
-                    if (existeCantidad == true) {
-                        //soundWrong();
-                        $('#lblcant2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgC.innerHTML = ' Cantidad Excedente';
-                        canti.classList.remove('border-success');
-                        msgC.classList.remove('text-success');
-                        msgC.classList.add('text-dark');
-                        canti.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-                    p = $('#parte').val();
-                    s = $('#serial').val();
-                    c = $('#cantidad').val();
-                    if (p != "" && s != "" && c != "") {
-
-                        $('#btnguardar').prop("disabled", false);
-                        msg.innerHTML = '';
-                        $('#lblparte2').hide();
-                        parteT.classList.remove('border-dark');
-                        msg.classList.add('text-success');
-                        parteT.classList.add('border-success');
-
-
-                        $('#lblserial2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgS.innerHTML = '';
-                        seriali.classList.remove('border-dark');
-                        msgS.classList.add('text-success');
-                        seriali.classList.add('border-success');
-
-                        $('#lblcant2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgC.innerHTML = '';
-                        canti.classList.remove('border-dark');
-                        msgC.classList.add('text-success');
-                        canti.classList.add('border-success');
-
-                    }
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-
-
+                } else {
 
                     ///////////Master y B10 GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    var partes
+                    var qty
+                    var serial
+                    programa = <%- JSON.stringify(data) %>;
+                    var msg = document.getElementById("lblparte");
+                    var parteT = document.getElementById("parte");
+                    serial = <%- JSON.stringify(data3) %>;
+                    //console.log(infoArray)
+                    if (infoArray.length == 9 || infoArray.length == 10 || infoArray.length == 11 || infoArray.length == 12) {//GM MASTER Y B10
 
-
-
-                    ///////////MIXED MASTER GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                } else if (infoArray.length == 36) {
-                    var partes = []
-                    var qty = []
-                    var serial;
-                    for (x = 0; x < infoArray.length; x++) {
-                        if (infoArray[x].startsWith("P") && infoArray[x].length > 1) {
-
-                            partes.push(infoArray[x].substring(1))
-
-                        } else if (infoArray[x].startsWith("7Q") && infoArray[x].endsWith("PL") && infoArray[x].length > 4) {
-                            qty.push(infoArray[x].substring(infoArray[x].lastIndexOf("Q") + 1, infoArray[x].lastIndexOf("PL")))
-
+                        if (infoArray[3].startsWith("6JUN")) { //Master
+                            $('#parte').val(infoArray[1].substring(1));
+                            $('#cantidad').val(infoArray[6].substring(infoArray[6].lastIndexOf("Q") + 1, infoArray[6].lastIndexOf("PL")));
+                            $('#serial').val(infoArray[3]);
+                        } else if (infoArray[3].startsWith("1JUN")) { //B10
+                            $('#parte').val(infoArray[1].substring(1));
+                            $('#cantidad').val(infoArray[2].substring(1));
+                            $('#serial').val(infoArray[3]);
                         }
-                    }
 
-                    serial = infoArray[1];
+                        partes = $('#parte').val();
+                        serial = $('#serial').val();
+                        qty = $('#cantidad').val();
 
-
-                    $('#parte').val(partes);
-                    $('#cantidad').val(qty);
-                    $('#serial').val(serial);
-
-
-
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    existeParte = false;
-                    for (let x = 0; x < partes.length; x++) {
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
 
                         for (let y = 0; y < programa.length; y++) {
 
-                            if (partes[x] == programa[y].programa_parte) {
+                            if (partes == programa[y].programa_parte) {
 
                                 existeParte = true;
                             }
 
                         }
 
+
+
                         if (existeParte == false) {
-                            break;
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
                         }
-                    }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
 
-                    if (existeParte == false) {
-                        //soundWrong();
-                        $('#lblparte2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msg.innerHTML = ' No Encontrado';
-                        parteT.classList.remove('border-success');
-                        msg.classList.remove('text-success');
-                        msg.classList.add('text-dark');
-                        parteT.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    existeSerial = false;
-                    seriales = <%- JSON.stringify(data3) %>;
-                    var msgS = document.getElementById("lblserial");
-                    var seriali = document.getElementById("serial");
-
-                    var id = $('#serial').val();
+                        var id = $('#serial').val();
 
 
-                    for (var i = 0; i < seriales.length; i++) {
-                        if (serial == seriales[i].captura_serial) {
-                            existeSerial = true;
-
-
-                        }
-                    }
-
-                    if (existeSerial == true) {
-                        //soundWrong();
-                        $('#lblserial2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgS.innerHTML = ' Ya registrado';
-                        seriali.classList.remove('border-success');
-                        msgS.classList.remove('text-success');
-                        msgS.classList.add('text-dark');
-                        seriali.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    existeCantidad = false
-                    programa = <%- JSON.stringify(data) %>;
-                    var msgC = document.getElementById("lblcant");
-                    var canti = document.getElementById("cantidad");
-
-                    for (var i = 0; i < programa.length; i++) {
-
-                        for (let y = 0; y < partes.length; y++) {
-                            qtyInt = parseInt(qty[y]);
-
-                            if (partes[y] == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
-
-                                existeCantidad = true
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
 
                             }
                         }
 
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+
+                            qtyInt = parseInt(qty);
+
+                            if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+
+
+                        ///////////Master y B10 GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+                        ///////////MIXED MASTER GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                    } else if (infoArray.length == 36) {
+                        var partes = []
+                        var qty = []
+                        var serial;
+                        for (x = 0; x < infoArray.length; x++) {
+                            if (infoArray[x].startsWith("P") && infoArray[x].length > 1) {
+
+                                partes.push(infoArray[x].substring(1))
+
+                            } else if (infoArray[x].startsWith("7Q") && infoArray[x].endsWith("PL") && infoArray[x].length > 4) {
+                                qty.push(infoArray[x].substring(infoArray[x].lastIndexOf("Q") + 1, infoArray[x].lastIndexOf("PL")))
+
+                            }
+                        }
+
+                        serial = infoArray[1];
+
+
+                        $('#parte').val(partes);
+                        $('#cantidad').val(qty);
+                        $('#serial').val(serial);
+
+
+
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
+                        for (let x = 0; x < partes.length; x++) {
+
+                            for (let y = 0; y < programa.length; y++) {
+
+                                if (partes[x] == programa[y].programa_parte) {
+
+                                    existeParte = true;
+                                }
+
+                            }
+
+                            if (existeParte == false) {
+                                break;
+                            }
+                        }
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+
+
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+                            for (let y = 0; y < partes.length; y++) {
+                                qtyInt = parseInt(qty[y]);
+
+                                if (partes[y] == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                    existeCantidad = true
+
+                                }
+                            }
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+
+                        ///////////MIXED MASTER GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+                        ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                    } else if (infoArray.length == 8) {//FORD
+                        var partes
+                        var qty
+                        var serial
+
+                        $('#parte').val(infoArray[1].substring(1));
+                        $('#cantidad').val(infoArray[2].substring(1));
+                        $('#serial').val(infoArray[7].substring(1));
+
+
+                        partes = $('#parte').val()
+                        qty = $('#cantidad').val()
+                        serial = $('#serial').val()
+
+
+
+
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
+
+                        for (let y = 0; y < programa.length; y++) {
+
+                            if (partes == programa[y].programa_parte) {
+
+                                existeParte = true;
+                            }
+
+                        }
+
+
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+
+                            qtyInt = parseInt(qty);
+
+                            if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
                     }
-
-                    if (existeCantidad == true) {
-                        //soundWrong();
-                        $('#lblcant2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgC.innerHTML = ' Cantidad Excedente';
-                        canti.classList.remove('border-success');
-                        msgC.classList.remove('text-success');
-                        msgC.classList.add('text-dark');
-                        canti.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-                    p = $('#parte').val();
-                    s = $('#serial').val();
-                    c = $('#cantidad').val();
-                    if (p != "" && s != "" && c != "") {
-
-                        $('#btnguardar').prop("disabled", false);
-                        msg.innerHTML = '';
-                        $('#lblparte2').hide();
-                        parteT.classList.remove('border-dark');
-                        msg.classList.add('text-success');
-                        parteT.classList.add('border-success');
-
-
-                        $('#lblserial2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgS.innerHTML = '';
-                        seriali.classList.remove('border-dark');
-                        msgS.classList.add('text-success');
-                        seriali.classList.add('border-success');
-
-                        $('#lblcant2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgC.innerHTML = '';
-                        canti.classList.remove('border-dark');
-                        msgC.classList.add('text-success');
-                        canti.classList.add('border-success');
-
-                    }
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-
-
-                    ///////////MIXED MASTER GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
                     ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-                } else if (infoArray.length == 8) {//FORD
-                    var partes
-                    var qty
-                    var serial
-
-                    $('#parte').val(infoArray[1].substring(1));
-                    $('#cantidad').val(infoArray[2].substring(1));
-                    $('#serial').val(infoArray[7].substring(1));
+                    ///////////MASTER VWWW///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-                    partes = $('#parte').val()
-                    qty = $('#cantidad').val()
-                    serial = $('#serial').val()
+                else if (infoArray.length == 19 || infoArray.length == 21) {//VW MASTER 19 SINGLE 21
+                        var partes
+                        var qty
+                        var serial
 
-
-
-
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    existeParte = false;
-
-                    for (let y = 0; y < programa.length; y++) {
-
-                        if (partes == programa[y].programa_parte) {
-
-                            existeParte = true;
+                        if(infoArray.length == 19){
+                            $('#parte').val((infoArray[14].substring(1).trim()));
+                            $('#cantidad').val(infoArray[17].substring(2,infoArray[17].length - 2));
+                            $('#serial').val(infoArray[3]);
+                        }else{
+                            $('#parte').val((infoArray[13].substring(1).trim()));
+                            $('#cantidad').val(infoArray[18].substring(2,infoArray[18].length - 2));
+                            $('#serial').val(infoArray[3]);
                         }
-
-                    }
-
-
-
-                    if (existeParte == false) {
-                        //soundWrong();
-                        $('#lblparte2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msg.innerHTML = ' No Encontrado';
-                        parteT.classList.remove('border-success');
-                        msg.classList.remove('text-success');
-                        msg.classList.add('text-dark');
-                        parteT.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    existeSerial = false;
-                    seriales = <%- JSON.stringify(data3) %>;
-                    var msgS = document.getElementById("lblserial");
-                    var seriali = document.getElementById("serial");
-
-                    var id = $('#serial').val();
-
-
-                    for (var i = 0; i < seriales.length; i++) {
-                        if (serial == seriales[i].captura_serial) {
-                            existeSerial = true;
-                        }
-                    }
-
-                    if (existeSerial == true) {
-                        //soundWrong();
-                        $('#lblserial2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgS.innerHTML = ' Ya registrado';
-                        seriali.classList.remove('border-success');
-                        msgS.classList.remove('text-success');
-                        msgS.classList.add('text-dark');
-                        seriali.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    existeCantidad = false
-                    programa = <%- JSON.stringify(data) %>;
-                    var msgC = document.getElementById("lblcant");
-                    var canti = document.getElementById("cantidad");
-
-                    for (var i = 0; i < programa.length; i++) {
-
-
-                        qtyInt = parseInt(qty);
-
-                        if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
-
-                            existeCantidad = true
-
-                        }
-
-
-                    }
-
-                    if (existeCantidad == true) {
-                        //soundWrong();
-                        $('#lblcant2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgC.innerHTML = ' Cantidad Excedente';
-                        canti.classList.remove('border-success');
-                        msgC.classList.remove('text-success');
-                        msgC.classList.add('text-dark');
-                        canti.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-                    p = $('#parte').val();
-                    s = $('#serial').val();
-                    c = $('#cantidad').val();
-                    if (p != "" && s != "" && c != "") {
-
-                        $('#btnguardar').prop("disabled", false);
-                        msg.innerHTML = '';
-                        $('#lblparte2').hide();
-                        parteT.classList.remove('border-dark');
-                        msg.classList.add('text-success');
-                        parteT.classList.add('border-success');
-
-
-                        $('#lblserial2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgS.innerHTML = '';
-                        seriali.classList.remove('border-dark');
-                        msgS.classList.add('text-success');
-                        seriali.classList.add('border-success');
-
-                        $('#lblcant2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgC.innerHTML = '';
-                        canti.classList.remove('border-dark');
-                        msgC.classList.add('text-success');
-                        canti.classList.add('border-success');
-
-                    }
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-                }
-
-                ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                ///////////MASTER VWWW///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-             else if (infoArray.length == 19) {//VW
-                    var partes
-                    var qty
-                    var serial
-
-                    $('#parte').val((infoArray[14].substring(1)).trim());
-                    $('#cantidad').val(infoArray[17].substring(2,infoArray[17].length - 2));
-                    $('#serial').val(infoArray[2]);
-
-
                     
-                    partes = ($('#parte').val())
-                    qty = $('#cantidad').val()
-                    serial = $('#serial').val()
-
-                    console.log(partes)
-                    console.log(qty)
-                    console.log(serial)
 
 
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    existeParte = false;
+                        
+                        partes = ($('#parte').val())
+                        qty = $('#cantidad').val()
+                        serial = $('#serial').val()
 
-                    for (let y = 0; y < programa.length; y++) {
-
-                        if (partes == (programa[y].programa_parte)) {
-
-                            existeParte = true;
-                        }
-
-                    }
+                        //console.log(partes)
+                        //console.log(qty)
+                        //console.log(serial)
 
 
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
 
-                    if (existeParte == false) {
-                        //soundWrong();
-                        $('#lblparte2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msg.innerHTML = ' No Encontrado';
-                        parteT.classList.remove('border-success');
-                        msg.classList.remove('text-success');
-                        msg.classList.add('text-dark');
-                        parteT.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    existeSerial = false;
-                    seriales = <%- JSON.stringify(data3) %>;
-                    var msgS = document.getElementById("lblserial");
-                    var seriali = document.getElementById("serial");
+                        for (let y = 0; y < programa.length; y++) {
+                            //console.log("partescan: "+partes)
+                            //console.log("partebase: "+programa[y].programa_parte)
+                            if (partes == (programa[y].programa_parte)) {
 
-                    var id = $('#serial').val();
-
-
-                    for (var i = 0; i < seriales.length; i++) {
-                        if (serial == seriales[i].captura_serial) {
-                            existeSerial = true;
-                        }
-                    }
-
-                    if (existeSerial == true) {
-                        //soundWrong();
-                        $('#lblserial2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgS.innerHTML = ' Ya registrado';
-                        seriali.classList.remove('border-success');
-                        msgS.classList.remove('text-success');
-                        msgS.classList.add('text-dark');
-                        seriali.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    existeCantidad = false
-                    programa = <%- JSON.stringify(data) %>;
-                    var msgC = document.getElementById("lblcant");
-                    var canti = document.getElementById("cantidad");
-
-                    for (var i = 0; i < programa.length; i++) {
-
-
-                        qtyInt = parseInt(qty);
-
-                        if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
-
-                            existeCantidad = true
+                                existeParte = true;
+                            }
 
                         }
 
 
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+
+                            qtyInt = parseInt(qty);
+
+                            if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
                     }
 
-                    if (existeCantidad == true) {
-                        //soundWrong();
-                        $('#lblcant2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgC.innerHTML = ' Cantidad Excedente';
-                        canti.classList.remove('border-success');
-                        msgC.classList.remove('text-success');
-                        msgC.classList.add('text-dark');
-                        canti.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
+                    ///////////MASTER VWWW///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+                    ///////////MASTER VW PUEBLAAAAA///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                else if (infoArray.length == 17) {//VW
+                        var partes
+                        var qty
+                        var serial
+
+                        $('#parte').val((infoArray[14].substring(1)).trim());
+                        $('#cantidad').val(infoArray[11].substring(1));
+                        $('#serial').val(infoArray[15]);
+
+
+                        
+                        partes = ($('#parte').val())
+                        qty = $('#cantidad').val()
+                        serial = $('#serial').val()
+
+                        //console.log(partes)
+                        //console.log(qty)
+                        //console.log(serial)
+
+
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
+
+                        for (let y = 0; y < programa.length; y++) {
+
+                            if (partes == (programa[y].programa_parte)) {
+
+                                existeParte = true;
+                            }
+
+                        }
+
+
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+
+                            qtyInt = parseInt(qty);
+
+                            if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
                     }
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-                    p = $('#parte').val();
-                    s = $('#serial').val();
-                    c = $('#cantidad').val();
-                    if (p != "" && s != "" && c != "") {
 
-                        $('#btnguardar').prop("disabled", false);
-                        msg.innerHTML = '';
-                        $('#lblparte2').hide();
-                        parteT.classList.remove('border-dark');
-                        msg.classList.add('text-success');
-                        parteT.classList.add('border-success');
+                    ///////////MASTER VWWW PUEBLAAA///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+            
 
-                        $('#lblserial2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgS.innerHTML = '';
-                        seriali.classList.remove('border-dark');
-                        msgS.classList.add('text-success');
-                        seriali.classList.add('border-success');
-
-                        $('#lblcant2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgC.innerHTML = '';
-                        canti.classList.remove('border-dark');
-                        msgC.classList.add('text-success');
-                        canti.classList.add('border-success');
-
-                    }
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                    count = 0;
+                    info = "";
+                    infoArray = []
                 }
 
-                ///////////MASTER VWWW///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            }, 100);
+
+        })
+
+        //////////WINDOWS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    }else{
+
+        //////////ANDROID//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        let info
+        let infoArray = []
+        count=0;
+
+        $('#serial').keydown(function (e) {
+
+
+            if(e.keyCode===13){
+                let inputText = $('#serial').val()
+
+                for (let i = 0; i < inputText.length; i++) {
+                    //console.log("char",inputText[i]);
+                    //console.log("hex",inputText[i].charCodeAt(0).toString(16).toUpperCase());
+                    if(inputText[i].charCodeAt(0).toString(16).toUpperCase()==="1D"){
+                        infoArray.push(info)
+                        info="";  
+                        count++  
+                    }else{
+                        info+=inputText[i].toUpperCase()
+                    }
+
+                } 
+                //console.log(info);
+                infoArray.push(info)
 
 
 
+                //if($('#serial').val().startsWith("s") || $('#serial').val().startsWith("S"))
+                if (!$('#serial').val().startsWith("[")) {
+                    count = 0;
+                    info = "";
+                    infoArray = []
+            
+                    serialFunction();
 
-                ///////////MASTER VW PUEBLAAAAA///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                } else {
 
-
-             else if (infoArray.length == 17) {//VW
+                    ///////////Master y B10 GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     var partes
                     var qty
                     var serial
-
-                    $('#parte').val((infoArray[14].substring(1)).trim());
-                    $('#cantidad').val(infoArray[11].substring(1));
-                    $('#serial').val(infoArray[15]);
-
-
-                    
-                    partes = ($('#parte').val())
-                    qty = $('#cantidad').val()
-                    serial = $('#serial').val()
-
-                    console.log(partes)
-                    console.log(qty)
-                    console.log(serial)
-
-
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    existeParte = false;
-
-                    for (let y = 0; y < programa.length; y++) {
-
-                        if (partes == (programa[y].programa_parte)) {
-
-                            existeParte = true;
-                        }
-
-                    }
-
-
-
-                    if (existeParte == false) {
-                        //soundWrong();
-                        $('#lblparte2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msg.innerHTML = ' No Encontrado';
-                        parteT.classList.remove('border-success');
-                        msg.classList.remove('text-success');
-                        msg.classList.add('text-dark');
-                        parteT.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    existeSerial = false;
-                    seriales = <%- JSON.stringify(data3) %>;
-                    var msgS = document.getElementById("lblserial");
-                    var seriali = document.getElementById("serial");
-
-                    var id = $('#serial').val();
-
-
-                    for (var i = 0; i < seriales.length; i++) {
-                        if (serial == seriales[i].captura_serial) {
-                            existeSerial = true;
-                        }
-                    }
-
-                    if (existeSerial == true) {
-                        //soundWrong();
-                        $('#lblserial2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgS.innerHTML = ' Ya registrado';
-                        seriali.classList.remove('border-success');
-                        msgS.classList.remove('text-success');
-                        msgS.classList.add('text-dark');
-                        seriali.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
-                    }
-                    //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    existeCantidad = false
                     programa = <%- JSON.stringify(data) %>;
-                    var msgC = document.getElementById("lblcant");
-                    var canti = document.getElementById("cantidad");
+                    var msg = document.getElementById("lblparte");
+                    var parteT = document.getElementById("parte");
+                    serial = <%- JSON.stringify(data3) %>;
+                    // console.log(infoArray)
+                    if (infoArray.length == 9 || infoArray.length == 10 || infoArray.length == 11 || infoArray.length == 12) {//GM MASTER Y B10
 
-                    for (var i = 0; i < programa.length; i++) {
+                        if (infoArray[3].startsWith("6JUN")) { //Master
+                            $('#parte').val(infoArray[1].substring(1));
+                            $('#cantidad').val(infoArray[6].substring(infoArray[6].lastIndexOf("Q") + 1, infoArray[6].lastIndexOf("PL")));
+                            $('#serial').val(infoArray[3]);
+                        } else if (infoArray[3].startsWith("1JUN")) { //B10
+                            $('#parte').val(infoArray[1].substring(1));
+                            $('#cantidad').val(infoArray[2].substring(1));
+                            $('#serial').val(infoArray[3]);
+                        }
 
+                        partes = $('#parte').val();
+                        serial = $('#serial').val();
+                        qty = $('#cantidad').val();
 
-                        qtyInt = parseInt(qty);
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
 
-                        if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+                        for (let y = 0; y < programa.length; y++) {
 
-                            existeCantidad = true
+                            if (partes == programa[y].programa_parte) {
+
+                                existeParte = true;
+                            }
 
                         }
 
 
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+
+                            qtyInt = parseInt(qty);
+
+                            if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+
+
+                        ///////////Master y B10 GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+                        ///////////MIXED MASTER GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                    } else if (infoArray.length == 36) {
+                        var partes = []
+                        var qty = []
+                        var serial;
+                        for (x = 0; x < infoArray.length; x++) {
+                            if (infoArray[x].startsWith("P") && infoArray[x].length > 1) {
+
+                                partes.push(infoArray[x].substring(1))
+
+                            } else if (infoArray[x].startsWith("7Q") && infoArray[x].endsWith("PL") && infoArray[x].length > 4) {
+                                qty.push(infoArray[x].substring(infoArray[x].lastIndexOf("Q") + 1, infoArray[x].lastIndexOf("PL")))
+
+                            }
+                        }
+
+                        serial = infoArray[1];
+
+
+                        $('#parte').val(partes);
+                        $('#cantidad').val(qty);
+                        $('#serial').val(serial);
+
+
+
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
+                        for (let x = 0; x < partes.length; x++) {
+
+                            for (let y = 0; y < programa.length; y++) {
+
+                                if (partes[x] == programa[y].programa_parte) {
+
+                                    existeParte = true;
+                                }
+
+                            }
+
+                            if (existeParte == false) {
+                                break;
+                            }
+                        }
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+
+
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+                            for (let y = 0; y < partes.length; y++) {
+                                qtyInt = parseInt(qty[y]);
+
+                                if (partes[y] == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                    existeCantidad = true
+
+                                }
+                            }
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+
+                        ///////////MIXED MASTER GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+                        ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                    } else if (infoArray.length == 8) {//FORD
+                        
+                        var partes
+                        var qty
+                        var serial
+
+                        $('#parte').val(infoArray[1].substring(1));
+                        $('#cantidad').val(infoArray[2].substring(1));
+                        $('#serial').val(parseInt(infoArray[7].substring(1)));
+
+
+                        partes = $('#parte').val()
+                        qty = $('#cantidad').val()
+                        serial = parseInt($('#serial').val())
+
+
+
+
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
+
+                        for (let y = 0; y < programa.length; y++) {
+
+                            if (partes == programa[y].programa_parte) {
+
+                                existeParte = true;
+                            }
+
+                        }
+
+
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+
+                            qtyInt = parseInt(qty);
+
+                            if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
                     }
 
-                    if (existeCantidad == true) {
-                        //soundWrong();
-                        $('#lblcant2').show();
-                        $('#btnguardar').prop("disabled", true);
-                        msgC.innerHTML = ' Cantidad Excedente';
-                        canti.classList.remove('border-success');
-                        msgC.classList.remove('text-success');
-                        msgC.classList.add('text-dark');
-                        canti.classList.add('border-dark');
-                        $('#parte').val("");
-                        $('#serial').val("");
-                        $('#cantidad').val("");
+                    ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    ///////////MASTER VWWW///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                else if (infoArray.length == 19 || infoArray.length == 21) {//VW MASTER 19 SINGLE 21
+                        var partes
+                        var qty
+                        var serial
+
+                        if(infoArray.length == 19){
+                            $('#parte').val((infoArray[14].substring(1).trim()));
+                            $('#cantidad').val(infoArray[17].substring(2,infoArray[17].length - 2));
+                            $('#serial').val(infoArray[3]);
+                        }else{
+                            $('#parte').val((infoArray[13].substring(1).trim()));
+                            $('#cantidad').val(infoArray[18].substring(2,infoArray[18].length - 2));
+                            $('#serial').val(infoArray[3]);
+                        }
+                    
+
+
+                        
+                        partes = ($('#parte').val())
+                        qty = $('#cantidad').val()
+                        serial = $('#serial').val()
+
+                        // console.log(partes)
+                        // console.log(qty)
+                        // console.log(serial)
+
+
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
+
+                        for (let y = 0; y < programa.length; y++) {
+                            // console.log("partescan: "+partes)
+                            // console.log("partebase: "+programa[y].programa_parte)
+                            if (partes == (programa[y].programa_parte)) {
+
+                                existeParte = true;
+                            }
+
+                        }
+
+
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+
+                            qtyInt = parseInt(qty);
+
+                            if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
                     }
-                    //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-                    p = $('#parte').val();
-                    s = $('#serial').val();
-                    c = $('#cantidad').val();
-                    if (p != "" && s != "" && c != "") {
 
-                        $('#btnguardar').prop("disabled", false);
-                        msg.innerHTML = '';
-                        $('#lblparte2').hide();
-                        parteT.classList.remove('border-dark');
-                        msg.classList.add('text-success');
-                        parteT.classList.add('border-success');
+                    ///////////MASTER VWWW///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-                        $('#lblserial2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgS.innerHTML = '';
-                        seriali.classList.remove('border-dark');
-                        msgS.classList.add('text-success');
-                        seriali.classList.add('border-success');
 
-                        $('#lblcant2').hide();
-                        $('#btnguardar').prop("disabled", false);
-                        msgC.innerHTML = '';
-                        canti.classList.remove('border-dark');
-                        msgC.classList.add('text-success');
-                        canti.classList.add('border-success');
 
+                    ///////////MASTER VW PUEBLAAAAA///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                else if (infoArray.length == 17) {//VW
+                        var partes
+                        var qty
+                        var serial
+
+                        $('#parte').val((infoArray[14].substring(1)).trim());
+                        $('#cantidad').val(infoArray[11].substring(1));
+                        $('#serial').val(infoArray[15]);
+
+
+                        
+                        partes = ($('#parte').val())
+                        qty = $('#cantidad').val()
+                        serial = $('#serial').val()
+
+                        // console.log(partes)
+                        // console.log(qty)
+                        // console.log(serial)
+
+
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        existeParte = false;
+
+                        for (let y = 0; y < programa.length; y++) {
+
+                            if (partes == (programa[y].programa_parte)) {
+
+                                existeParte = true;
+                            }
+
+                        }
+
+
+
+                        if (existeParte == false) {
+                            //soundWrong();
+                            $('#lblparte2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msg.innerHTML = ' No Encontrado';
+                            parteT.classList.remove('border-success');
+                            msg.classList.remove('text-success');
+                            msg.classList.add('text-dark');
+                            parteT.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        existeSerial = false;
+                        seriales = <%- JSON.stringify(data3) %>;
+                        var msgS = document.getElementById("lblserial");
+                        var seriali = document.getElementById("serial");
+
+                        var id = $('#serial').val();
+
+
+                        for (var i = 0; i < seriales.length; i++) {
+                            if (serial == seriales[i].captura_serial) {
+                                existeSerial = true;
+                            }
+                        }
+
+                        if (existeSerial == true) {
+                            //soundWrong();
+                            $('#lblserial2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgS.innerHTML = ' Ya registrado';
+                            seriali.classList.remove('border-success');
+                            msgS.classList.remove('text-success');
+                            msgS.classList.add('text-dark');
+                            seriali.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        existeCantidad = false
+                        programa = <%- JSON.stringify(data) %>;
+                        var msgC = document.getElementById("lblcant");
+                        var canti = document.getElementById("cantidad");
+
+                        for (var i = 0; i < programa.length; i++) {
+
+
+                            qtyInt = parseInt(qty);
+
+                            if (partes == programa[i].programa_parte && qtyInt > (programa[i].programa_cant - programa[i].programa_capt)) {
+
+                                existeCantidad = true
+
+                            }
+
+
+                        }
+
+                        if (existeCantidad == true) {
+                            //soundWrong();
+                            $('#lblcant2').show();
+                            $('#btnguardar').prop("disabled", true);
+                            msgC.innerHTML = ' Cantidad Excedente';
+                            canti.classList.remove('border-success');
+                            msgC.classList.remove('text-success');
+                            msgC.classList.add('text-dark');
+                            canti.classList.add('border-dark');
+                            $('#parte').val("");
+                            $('#serial').val("");
+                            $('#cantidad').val("");
+                        }
+                        //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                        p = $('#parte').val();
+                        s = $('#serial').val();
+                        c = $('#cantidad').val();
+                        if (p != "" && s != "" && c != "") {
+
+                            $('#btnguardar').prop("disabled", false);
+                            msg.innerHTML = '';
+                            $('#lblparte2').hide();
+                            parteT.classList.remove('border-dark');
+                            msg.classList.add('text-success');
+                            parteT.classList.add('border-success');
+
+
+                            $('#lblserial2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgS.innerHTML = '';
+                            seriali.classList.remove('border-dark');
+                            msgS.classList.add('text-success');
+                            seriali.classList.add('border-success');
+
+                            $('#lblcant2').hide();
+                            $('#btnguardar').prop("disabled", false);
+                            msgC.innerHTML = '';
+                            canti.classList.remove('border-dark');
+                            msgC.classList.add('text-success');
+                            canti.classList.add('border-success');
+
+                        }
+                        //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
                     }
-                    //Lastttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+                    ///////////MASTER VWWW PUEBLAAA///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                    count = 0;
+                    info = "";
+                    infoArray = []
                 }
-
-                ///////////MASTER VWWW PUEBLAAA///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-                count = 0;
-                info = "";
-                infoArray = []
             }
+        })
 
-        }, 100);
-
-
-
-    })
-
-
-
+        //////////ANDROID//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    }
 
 
 

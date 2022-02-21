@@ -141,7 +141,7 @@ controller.guardar_embarque_POST = (req, res) => {
 
     if (access == true) { 
         for (let i = 0; i < object.length; i++) {
-            funcion.controllerInsertPrograma(embarque, object[i].parte.trim(), cliente, object[i].destino, object[i].cantidad, username, fecha, (err, result) => {
+            funcion.controllerInsertPrograma(embarque, object[i].parte, cliente, object[i].destino, object[i].cantidad, username, fecha, (err, result) => {
                 if (err) throw err;
             });
 
@@ -981,6 +981,15 @@ controller.revisar_cierre_POST = (req, res) => {
 
     let user = req.connection.user
     embarque = req.body.idembarque
+    let emb;
+
+    /*
+    if(embString.includes("#")){
+         emb=embString.replace("#","")         
+      }else{
+         emb=embarque;
+      }
+      */
 
 
     funcion.controllerGetCierre(embarque, (err, result) => {
