@@ -139,9 +139,13 @@
 </html>
 
 <script>
+
+    let navegador
+    navegador=window.navigator.platform
+
     empleado = <%- JSON.stringify(empleado) %>;
 
-    if (empleado != 'embarque') {
+    if (empleado != 'embarque' && (navegador.startsWith("W") || navegador.startsWith("w"))) {
 
         w = document.getElementById("wrapper");
         w.classList.add('toggled');

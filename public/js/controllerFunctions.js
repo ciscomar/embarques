@@ -50,7 +50,7 @@ funcion.controllerClientes = (callback) => {
 funcion.controllerInsertPrograma = (embarque, parte, cliente, destino, cantidad, empleado, fecha, callback) => {
     db.query(`
     INSERT INTO embarque_programa (programa_embarque, programa_parte, programa_cliente, programa_destino, programa_cant, programa_emp, programa_fecha,programa_status)
-    VALUES( '${embarque}','${parte}', '${cliente}','${destino}','${cantidad}','${empleado}','${fecha}', 'Activo')`, function (err, result, fields) {
+    VALUES( '${embarque}',TRIM('${parte}'), '${cliente}','${destino}','${cantidad}','${empleado}','${fecha}', 'Activo')`, function (err, result, fields) {
             if (err) {
                 callback(err, null);
             } else {
@@ -86,7 +86,7 @@ funcion.controllerTablaEmbarques = (callback) => {
 
 funcion.controllerTablaEmbarquesActivo = (callback) => {
     db.query(`SELECT programa_embarque, programa_cliente, programa_fecha, programa_emp FROM embarque_programa, embarque_cierre 
-    WHERE embarque_programa.programa_embarque= embarque_cierre.embarque
+    WHERE embarque_programa.programa_embarque= embarque_cierre.embarque AND(embarque_programa.programa_fecha> "2022-01-01")
     AND (embarque_programa.programa_status='Activo'
     || embarque_cierre.caja='Sin Registro')
      GROUP BY(embarque_programa.programa_embarque)`, function (err, result, fields) {
@@ -126,7 +126,7 @@ funcion.controllerCapturaEmbarque = (idembarque, callback) => {
 
 funcion.controllerInsertCaptura = (embarque, parte, cantidad, serial, empleado, callback) => {
     db.query(`INSERT INTO embarque_captura (captura_embarque, captura_parte, captura_cant, captura_serial, captura_emp, captura_fecha)
-    VALUES( '${embarque}','${parte}', ${cantidad},'${serial}','${empleado}', NOW())`, function (err, result, fields) {
+    VALUES( '${embarque}',TRIM('${parte}'), ${cantidad},'${serial}','${empleado}', NOW())`, function (err, result, fields) {
             if (err) {
                 callback(err, null);
             } else {
