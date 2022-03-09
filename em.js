@@ -1,9 +1,10 @@
-
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 var multer = require('multer');
 const app = express();
+
 
 var fileupload = require("express-fileupload");
 app.use(fileupload());
@@ -29,6 +30,7 @@ const routes = require('./routes/routes');
 app.use(express.static('node_modules'))
 //Declarando body parser y sus funciones
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
 //Declarando rutas de express
 app.use(routes);

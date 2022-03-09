@@ -31,6 +31,10 @@ router.post('/cerrar_embarque', routesController.cerrar_embarque_POST);
 router.post('/revisar_cierre', routesController.revisar_cierre_POST);
 router.post('/cierre_directo', routesController.cierre_directo_POST);
 router.get('/consulta_serial/:id', routesController.consulta_serial_GET);
+router.post('/getDelivery', routesController.getDelivery_POST);
+router.post('/getTotalQty', routesController.getTotalQty_POST);
+router.post('/getDeliveryInfo', routesController.getDeliveryInfo_POST);
+router.post('/checksingle', routesController.checkSingle_POST);
 
 
 router.get('*', (req, res) => {

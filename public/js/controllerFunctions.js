@@ -497,4 +497,56 @@ funcion.getSerial = (serial) => {
 }
 
 
+
+funcion.getTotalQty = (embarque) => {
+    return new Promise((resolve, reject) => {
+
+        dbP(`SELECT SUM(programa_cant) AS Total
+        FROM 
+            embarque_programa 
+        WHERE 
+            programa_embarque= '${embarque}'
+            
+            `)
+            .then((result) => { resolve(result) })
+            .catch((error) => { reject(error) })
+    })
+}
+
+
+
+funcion.getDelivery = (embarque) => {
+    return new Promise((resolve, reject) => {
+
+        dbP(`SELECT COUNT(id) AS found
+        FROM 
+            embarque_delivery
+        WHERE 
+            delivery_embarque= '${embarque}'
+            
+            `)
+            .then((result) => { resolve(result) })
+            .catch((error) => { reject(error) })
+    })
+}
+
+
+
+funcion.checkSingle = (master,single) => {
+    return new Promise((resolve, reject) => {
+
+        dbP(`SELECT COUNT(id) AS found
+        FROM 
+            embarque_delivery
+        WHERE 
+            delivery_master= '${master}' AND  delivery_single= '${single}'
+            
+            `)
+            .then((result) => { resolve(result) })
+            .catch((error) => { reject(error) })
+    })
+}
+
+
+
 module.exports = funcion;

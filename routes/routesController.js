@@ -288,7 +288,7 @@ controller.guardar_captura_POST = (req, res) => {
     
     }else{
 
-        parte = req.body.mparte
+    parte = req.body.mparte
     serial = req.body.mserial
     cantidad = req.body.mcantidad
     empleado = req.body.mempleado
@@ -1032,6 +1032,145 @@ controller.consulta_serial_GET = (req, res) => {
         .catch((err) => { console.log(err) })
 
 };
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+let amqp = require('amqplib/callback_api');
+const { v4: uuidv4 } = require('uuid');
+let estacion = uuidv4();
+
+
+controller.getDelivery_POST = (req, res) => {
+    let delivery = req.body.delivery
+    let qty= req.body.qty
+    let embarque= req.body.embarque
+
+
+
+    async function waitForPromise() {
+
+        let process = "shipment_delivery"
+        let send = `{"station":"${estacion}","serial_num":"","delivery":"${delivery}","cantidad":"${qty}","process":"${process}", "material":"","embarque":"${embarque}"}`
+        amqpRequest(send)
+            .then(result => {
+                res.json(result)
+            })
+            .catch(err => {
+                console.error(err);
+            })
+
+    }
+    waitForPromise() 
+}
+
+
+
+
+
+function amqpRequest(data) {
+    return new Promise((resolve, reject) => {
+        let send = data
+        let args = process.argv.slice(2);
+        let estacion = data.station
+        if (args.length == 0) {
+            // console.info("Usage: rpc_client.js num");
+            // process.exit(1);
+        }
+
+        console.log(process.env.RMQ_USER);
+        amqp.connect(`amqp://${process.env.RMQ_USER}:${process.env.RMQ_PASS}@${process.env.RMQ_SERVER}`, function (error0, connection) {
+            if (error0) {
+                // throw error0;
+                reject(error0)
+            }
+            connection.createChannel(function (error1, channel) {
+                if (error1) {
+                    // throw error1;
+                    reject(error1)
+                }
+                channel.assertQueue('', {
+                    exclusive: true
+                }, function (error2, q) {
+                    if (error2) {
+                        // throw error2;
+                        reject(error2)
+                    }
+                    let correlationId = estacion;
+                    console.info(' [x] Requesting: ', send);
+
+                    channel.consume(q.queue, function (msg) {
+                        if (msg.properties.correlationId == correlationId) {
+                            console.info(' [x] Response:   ', msg.content.toString());
+                            resolve(msg.content.toString())
+                            setTimeout(function () {
+                                connection.close();
+                                // process.exit(0)
+                            }, 500);
+
+                        }
+                    }, {
+                        noAck: true
+                    });
+
+                    channel.sendToQueue('rpc_queue',
+                        Buffer.from(send.toString()), {
+                        correlationId: correlationId,
+                        replyTo: q.queue
+                    });
+                });
+            });
+        });
+    })
+}
+
+
+
+
+controller.getTotalQty_POST = (req, res) => {
+
+    let embarque = req.body.embarque
+
+    funcion.getTotalQty(embarque)
+        .then((result) => { 
+            res.json(result) })
+        .catch((err) => { console.error(err) })
+}
+
+
+
+
+controller.getDeliveryInfo_POST = (req, res) => {
+
+    let embarque = req.body.embarque
+
+    funcion.getDelivery(embarque)
+        .then((result) => { 
+            res.json(result) })
+        .catch((err) => { console.error(err) })
+}
+
+
+controller.checkSingle_POST = (req, res) => {
+
+    let master = req.body.master
+    let single = req.body.single
+
+    funcion.checkSingle(master,single)
+        .then((result) => { 
+            res.json(result) })
+        .catch((err) => { console.error(err) })
+}
+
+
 
 
 

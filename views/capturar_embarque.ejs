@@ -7,7 +7,7 @@
     <div class="row">
         <div class="box-header col-lg-6">
             <br>
-            <h3 class="box-title">Capturar Embarque: #<%=data[0].programa_embarque%> </h3>
+            <h3 class="box-title" id="tituloEmbarque">Capturar Embarque: #<%=data[0].programa_embarque%></h3>
 
 
         </div>
@@ -237,9 +237,167 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+<div class="modal fade animate__animated animate__zoomInDown" id="modalScanDelivery" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+              <h5 id="tituloSuccess"><span class="text-info  fas fa-truck"></span> Delivery </h5>
+              <p id="cantidadSuccess" style="font-size: x-large"></p>
+            </div>
+
+            <form id="delivery_form">
+              <div class="col-12 col-lg-12 text-center mb-2">
+                <input type="text" class="form-control" name="delivery" id="delivery" autocomplete="off">
+              </div>
+            </form>
+
+
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary btn-block mr-auto" id="btnModalTerminar"
+                onClick="cancel()" data-dismiss="modal"><span class="text-white fas fa-times-circle"></span>
+                Cancelar</button>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="modal fade animate__animated animate__zoomInDown" id="modalSingle" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+                <h4>
+                    <span>Scan Single:
+                        <span class="badge badge-warning " id="lblsingle2">
+                            <span class="badge badge-danger fas fa-exclamation-triangle">
+                            </span>
+                            <span id="lblsingle" style="font-size: 15px">
+
+                            </span>
+                        </span>
+                    </span>
+                </h4>
+            </div>
+
+            <form id="single_form">
+              <div class="col-12 col-lg-12 text-center mb-2">
+                <input type="text" class="form-control" name="single" id="single" autocomplete="off">
+              </div>
+            </form>
+   
+
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary btn-block mr-auto" id="btnModalTerminar"
+                onClick="cancelSingle()" data-dismiss="modal"><span class="text-white fas fa-times-circle"></span>
+                Cancelar</button>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    
+        <div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header card-mov">
+
+                  <h3 class="card-mov"><span class="text-danger  fas fa-exclamation-triangle"></span> Error(s): <span class="badge badge-danger" id="cantidadErrores"></span> </h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+          
+                    <div class="col-lg-12">
+        
+                          <h5 id="errorMessage"><span class="text-danger  fas fa-exclamation-triangle"></span></h5>
+
+                    </div>
+                  </div>
+          
+                </div>
+                <div class="modal-footer">
+                  <button id="btnCerrarError" type="button" class="btn btn-secondary btnCerrar" data-dismiss="modal"   onClick="closeError()">Cerrar
+                  </button>
+          
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+          <div class="modal fade" id="modalSuccessDelivery" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header card-mov">               
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-2">
+                      <i class="fas fa-check-circle text-success" style="font-size: 2rem;"> </i>
+                    </div>
+                    <div class="col">
+                      <h5>Delivery Registrado</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button id="btnCerrar_Success" type="button" class="btn btn-secondary btnCerrar"
+                    data-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+
+
+
+
 <% include ./static/footer %>
 </div>
 </body>
+
+
+<div class="modal fade" id="modalSpinner" tabindex="-1" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header text-center">
+            <h2 class="modal-title "> <span class="text-secondary  fas fa-stopwatch"></span>
+                Cargando</h2>
+            <div class="spinner-grow spinner-grow-sm text-warning mt-4 cdelay-1" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow spinner-grow-sm text-primary mt-4 cdelay-2" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow spinner-grow-sm text-secondary mt-4 cdelay-3" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 
 </html>
 
@@ -255,6 +413,7 @@
     //TODO guardar imagenes en tabla del D: al cerrar embarque
 
     let navegador
+    let clientePr
 
     $(document).ready(function () {
         $('#MainForm').on('submit', function (e) {
@@ -279,6 +438,15 @@
                  }
              
         });
+
+
+
+
+        programaCliente = <%- JSON.stringify(data) %>;
+        //clientePr=programaCliente[0].programa_clienteç
+        clientePr=programaCliente[0].programa_cliente
+
+
     });
 
 
@@ -469,10 +637,15 @@
 
             let foundS = false;
             if (idS != "") {
+                /////B10 y BMWV TODAY
+                if (idS[0] == "S" || idS[0] == "s" || (idS[0] == "1" && (idS[1] == "s" || idS[1] == "S"))) {
 
-                if (idS[0] == "S" || idS[0] == "s" /*|| idS[0] == "1"*/) {
-
-                    var id = ($('#serial').val()).substr(1)
+                    if(idS[0] == "S" || idS[0] == "s"){
+                        var id = ($('#serial').val()).substr(1)
+                    }else{
+                        var id = ($('#serial').val()).substr(5,9)
+                    }
+                    
 
 
                     // /////////////////AXIOS
@@ -510,6 +683,11 @@
                             seriali.classList.remove('border-dark');
                             msg.classList.add('text-success');
                             seriali.classList.add('border-success');
+
+                            if(clientePr=="BMW"){
+                                $('#modalSingle').modal({ backdrop: 'static', keyboard: false })
+                                $('#single').focus()
+                            }
 
                         }
 
@@ -2316,32 +2494,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
+
+<script type="text/javascript" src="/js/functions/capturar_embarque.js"></script>
