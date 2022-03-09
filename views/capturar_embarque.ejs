@@ -416,6 +416,8 @@ aria-hidden="true">
     let clientePr
 
     $(document).ready(function () {
+
+        
         $('#MainForm').on('submit', function (e) {
            
 
@@ -445,6 +447,14 @@ aria-hidden="true">
         programaCliente = <%- JSON.stringify(data) %>;
         //clientePr=programaCliente[0].programa_clienteç
         clientePr=programaCliente[0].programa_cliente
+
+
+        if(clientePr!="BMW"){
+            $('#modalScanDelivery').attr("hidden",true)
+            $('#modalScanDelivery').remove()
+
+         
+            }
 
 
     });
