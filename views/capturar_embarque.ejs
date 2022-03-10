@@ -449,12 +449,15 @@ aria-hidden="true">
         clientePr=programaCliente[0].programa_cliente
 
 
-        if(clientePr!="BMW"){
-            $('#modalScanDelivery').attr("hidden",true)
-            $('#modalScanDelivery').remove()
+        // if(clientePr != "BMW"){
+        //     console.log("true");
+        //     $('#modalScanDelivery').attr("hidden",true)
+        //     $('#modalScanDelivery').remove()
 
          
-            }
+        //     }else{
+        //         $('#modalScanDelivery').modal({ backdrop: 'static', keyboard: false })
+        //     }
 
 
     });
@@ -653,7 +656,8 @@ aria-hidden="true">
                     if(idS[0] == "S" || idS[0] == "s"){
                         var id = ($('#serial').val()).substr(1)
                     }else{
-                        var id = ($('#serial').val()).substr(5,9)
+                        var id = ($('#serial').val()).substr(9).slice(0,-1)
+                        console.log(id);
                     }
                     
 
@@ -696,7 +700,9 @@ aria-hidden="true">
 
                             if(clientePr=="BMW"){
                                 $('#modalSingle').modal({ backdrop: 'static', keyboard: false })
-                                $('#single').focus()
+                                setTimeout(function () {
+                    $('#single').focus()
+                }, 500);
                             }
 
                         }

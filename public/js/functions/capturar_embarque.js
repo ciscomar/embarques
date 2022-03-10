@@ -13,12 +13,18 @@ let foundDelivery
 
 $(document).ready(function () {
 
-    $('#lblsingle2').hide();
-    getDelivery()
 
+    if(clientePr==="BMW"){
+        $('#lblsingle2').hide();
+        getDelivery()
+    }else{
+        
+        setTimeout(function () {
+            $('#serial').focus()
+        }, 500)
+    }
 
-
-
+    
 
 })
 
@@ -120,8 +126,16 @@ function getDelivery() {
 
             if (foundDelivery == 0) {
                 $('#modalScanDelivery').modal({ backdrop: 'static', keyboard: false })
-                delivery.focus()
+
+              
+                setTimeout(function () {
+                    $('#delivery').focus()
+                }, 500);
                 getTotal()
+            }else{
+            $('#modalScanDelivery').attr("hidden",true)
+            $('#modalScanDelivery').remove()
+
             }
 
 

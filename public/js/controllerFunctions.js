@@ -539,7 +539,7 @@ funcion.checkSingle = (master,single) => {
         FROM 
             embarque_delivery
         WHERE 
-            delivery_master= '${master}' AND  delivery_single= '${single}'
+            delivery_master LIKE '%${master}' AND  delivery_single= '${single}'
             
             `)
             .then((result) => { resolve(result) })
