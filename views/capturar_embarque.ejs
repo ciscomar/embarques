@@ -656,11 +656,11 @@ aria-hidden="true">
                     if(idS[0] == "S" || idS[0] == "s"){
                         var id = ($('#serial').val()).substr(1)
                     }else{
-                        var id = ($('#serial').val()).substr(9).slice(0,-1)
+                        var id = parseInt($('#serial').val().substr(9),36)
                         console.log(id);
                     }
                     
-
+                    //1S30817122Z4FO6
 
                     // /////////////////AXIOS
 
@@ -859,7 +859,7 @@ aria-hidden="true">
         let infoArray = []
         var timerNew;
         $('#serial').keypress(function (e) {
-
+            
             /////////////////////////////////Revisar cada caracter y meter al arreglo
             if (e.charCode === 29) {
                 infoArray.push(info.substring(1).toUpperCase())
@@ -868,7 +868,7 @@ aria-hidden="true">
                 info = "";
 
             }
-
+            console.log(infoArray);
             info += e.key
 
             /////////////////////////////////Despues de escanear
@@ -878,6 +878,7 @@ aria-hidden="true">
                 infoArray.push(info.substring(1).toUpperCase())
 
 
+                
                 //if($('#serial').val().startsWith("s") || $('#serial').val().startsWith("S"))
                 if (!$('#serial').val().startsWith("[")) {
                     count = 0;
@@ -1708,6 +1709,7 @@ aria-hidden="true">
                 } 
                 //console.log(info);
                 infoArray.push(info)
+                console.log(infoArray);
 
 
 
@@ -1718,9 +1720,11 @@ aria-hidden="true">
                     infoArray = []
             
                     serialFunction();
+                   
 
                 } else {
 
+                    
                     ///////////Master y B10 GM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     var partes
                     var qty
@@ -2192,6 +2196,10 @@ aria-hidden="true">
                         var serial
 
                         if(infoArray.length == 19){
+                            //todaybmw
+                            console.log((infoArray[14].substring(1).trim()));
+                            console.log(infoArray[17].substring(2,infoArray[17].length - 2));
+                            console.log(infoArray[3]);
                             $('#parte').val((infoArray[14].substring(1).trim()));
                             $('#cantidad').val(infoArray[17].substring(2,infoArray[17].length - 2));
                             $('#serial').val(infoArray[3]);
