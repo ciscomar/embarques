@@ -1121,7 +1121,7 @@ function amqpRequest(data) {
                         noAck: true
                     });
 
-                    channel.sendToQueue('rpc_queue',
+                    channel.sendToQueue('rpc_ship',
                         Buffer.from(send.toString()), {
                         correlationId: correlationId,
                         replyTo: q.queue
