@@ -412,6 +412,12 @@ aria-hidden="true">
     //TODO Calcular cantidades con tabla de captura
     //TODO guardar imagenes en tabla del D: al cerrar embarque
 
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, '/');
+
+    }
+
+
     let navegador
     let clientePr
 
