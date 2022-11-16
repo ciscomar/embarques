@@ -9,16 +9,16 @@ const app = express();
 var fileupload = require("express-fileupload");
 app.use(fileupload());
 //Declarando y adquiriendo nodesspi e informacion de usuario
-app.use(function (req, res, next) {
+// app.use(function (req, res, next) {
 
-  var nodeSSPI = require('node-sspi')
-  var nodeSSPIObj = new nodeSSPI({
-    retrieveGroups: true
-  })
-  nodeSSPIObj.authenticate(req, res, function(err){
-    res.finished || next()
-  })
-})
+//   var nodeSSPI = require('node-sspi')
+//   var nodeSSPIObj = new nodeSSPI({
+//     retrieveGroups: true
+//   })
+//   nodeSSPIObj.authenticate(req, res, function(err){
+//     res.finished || next()
+//   })
+// })
 //Carpeta view y visor ejs
 app.set('views',__dirname + '/views');
 app.set('view_engine', 'ejs');
