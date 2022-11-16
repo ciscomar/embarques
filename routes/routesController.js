@@ -21,13 +21,13 @@ controller.crear_equipo_GET = (req, res) => {
 
 //Login
 controller.login = (req, res) => {
-    let user = req.connection.user
+    //let user = req.connection.user
     loginId = req.params.id
     if (loginId == 'captura') {
         funcionE.empleadosAccessAll(1, '>=', (err, result) => {
 
             res.render('login.ejs', {
-                user: user, data: loginId, data2: result
+                 data: loginId, data2: result
             });
         });
     } else
@@ -92,7 +92,7 @@ controller.programar_cantidad_POST = (req, res) => {
     embarque = req.body.embarque;
     let user = req.connection.user
     let access= false;
-    
+
 
 
     for (let i = 0; i < req.connection.userGroups.length; i++) {
@@ -139,7 +139,7 @@ controller.guardar_embarque_POST = (req, res) => {
         }
     }
 
-    if (access == true) { 
+    if (access == true) {
         for (let i = 0; i < object.length; i++) {
             funcion.controllerInsertPrograma(embarque, object[i].parte, cliente, object[i].destino, object[i].cantidad, username, fecha, (err, result) => {
                 if (err) throw err;
@@ -198,53 +198,53 @@ controller.embarques_GET = (req, res) => {
 
 controller.captura_POST = (req, res) => {
 
-    let user = req.connection.user
+   // let user = req.connection.user
     empleado = req.body.user
-    let access= false;
+   // let access= false;
 
-    for (let i = 0; i < req.connection.userGroups.length; i++) {
-        if (req.connection.userGroups[i].toString() == 'TFT\\TFT.DEL.PAGES_Embarques' || 'TFT\\TFT.DEL.PAGES_Embarques_Admin') {
-            access = true;
-            break;
-        }
-    }
+    // for (let i = 0; i < req.connection.userGroups.length; i++) {
+    //     if (req.connection.userGroups[i].toString() == 'TFT\\TFT.DEL.PAGES_Embarques' || 'TFT\\TFT.DEL.PAGES_Embarques_Admin') {
+    //         access = true;
+    //         break;
+    //     }
+    // }
 
-    if (access == true) {
+    // if (access == true) {
 
         funcion.controllerTablaEmbarquesActivo((err, result) => {
             if (err) throw err;
             funcion.controllerCountActivoStatusAll((err, result2) => {
                 if (err) throw err;
                 res.render('embarques.ejs', {
-                    user: user, data: result, empleado: empleado, data2: result2
+                     data: result, empleado: empleado, data2: result2
                 });
             });
         });
 
 
-    } else {
-        res.render('acceso_denegado.ejs', {
-            user: user
-        });
-    }
+    // } else {
+    //     res.render('acceso_denegado.ejs', {
+    //         user: user
+    //     });
+    // }
 };
 
 controller.captura_embarque_POST = (req, res) => {
 
-    let user = req.connection.user
+   // let user = req.connection.user
     idembarque = req.body.idembarque
     empleado = req.body.idempleado
     existente = 'false'
-    let access= false;
+   // let access= false;
 
-    for (let i = 0; i < req.connection.userGroups.length; i++) {
-        if (req.connection.userGroups[i].toString() == 'TFT\\TFT.DEL.PAGES_Embarques' || 'TFT\\TFT.DEL.PAGES_Embarques_Admin') {
-            access = true;
-            break;
-        }
-    }
+    // for (let i = 0; i < req.connection.userGroups.length; i++) {
+    //     if (req.connection.userGroups[i].toString() == 'TFT\\TFT.DEL.PAGES_Embarques' || 'TFT\\TFT.DEL.PAGES_Embarques_Admin') {
+    //         access = true;
+    //         break;
+    //     }
+    // }
 
-    if (access == true) {
+    //if (access == true) {
 
         funcionE.empleadosNombre(empleado, (err, resultE) => {
             if (err) throw err;
@@ -254,9 +254,9 @@ controller.captura_embarque_POST = (req, res) => {
                     if (err) throw err;
                     funcion.controllerSerialCapturadoAll((err, result2) => {
                         if (err) throw err;
-                        
+
                         res.render('capturar_embarque.ejs', {
-                            user: user, data: result, data2: resultE, data3: result2, data7: existente, empleadoId: empleado, activos: result3
+                            data: result, data2: resultE, data3: result2, data7: existente, empleadoId: empleado, activos: result3
                         });
                     });
                 });
@@ -265,19 +265,19 @@ controller.captura_embarque_POST = (req, res) => {
 
 
 
-    } else {
-        res.render('acceso_denegado.ejs', {
-            user: user
-        });
-    }
+    // } else {
+    //     res.render('acceso_denegado.ejs', {
+    //         user: user
+    //     });
+    // }
 };
 
 controller.guardar_captura_POST = (req, res) => {
 
-    
 
-    let user = req.connection.user
-    let access= false;
+
+   // let user = req.connection.user
+   // let access= false;
     if (req.body.mparte == undefined){
     parte = req.body.parte
     serial = req.body.serial
@@ -285,7 +285,7 @@ controller.guardar_captura_POST = (req, res) => {
     empleado = req.body.empleado
     embarque = req.body.embarque2
     empleadoId = req.body.idempleado
-    
+
     }else{
 
     parte = req.body.mparte
@@ -296,18 +296,18 @@ controller.guardar_captura_POST = (req, res) => {
     empleadoId = req.body.midempleado
 
     }
-    
 
 
 
-    for (let i = 0; i < req.connection.userGroups.length; i++) {
-        if (req.connection.userGroups[i].toString() == 'TFT\\TFT.DEL.PAGES_Embarques' || 'TFT\\TFT.DEL.PAGES_Embarques_Admin') {
-            access = true;
-            break;
-        }
-    }
 
-    if (access == true) {
+    // for (let i = 0; i < req.connection.userGroups.length; i++) {
+    //     if (req.connection.userGroups[i].toString() == 'TFT\\TFT.DEL.PAGES_Embarques' || 'TFT\\TFT.DEL.PAGES_Embarques_Admin') {
+    //         access = true;
+    //         break;
+    //     }
+    // }
+
+    //if (access == true) {
 
         funcion.controllerSearchSerial(serial, (err, result6) => {
             if (err) throw err;
@@ -322,7 +322,7 @@ controller.guardar_captura_POST = (req, res) => {
                         funcion.controllerCountCierre(idembarque, (err, result3) => {
                             if (err) throw err;
                             res.render('capturar_embarque.ejs', {
-                                user: user, data: result, data2: empleado, data3: result2, data7: existente, empleadoId: empleadoId, activos: result3
+                                 data: result, data2: empleado, data3: result2, data7: existente, empleadoId: empleadoId, activos: result3
                             });
                         });
                     });
@@ -365,25 +365,25 @@ controller.guardar_captura_POST = (req, res) => {
                     setTimeout(function () {
                         funcion.controllerCapturaEmbarque(embarque, (err, result) => {
                             if (err) throw err;
-    
+
                             funcion.controllerSerialCapturadoAll((err, result2) => {
                                 if (err) throw err;
-    
+
                                 funcion.controllerCountActivo(embarque, (err, result4) => {
                                     if (err) throw err;
-    
+
                                     if (result4[0].Activos == 0) {
-    
+
                                         res.render('cerrar_embarque.ejs', {
-                                            user: user, empleadoId: empleadoId, embarque: embarque
+                                             empleadoId: empleadoId, embarque: embarque
                                         });
-    
+
                                     } else {
-    
+
                                         funcion.controllerCountCierre(idembarque, (err, result33) => {
                                             if (err) throw err;
                                             res.render('capturar_embarque.ejs', {
-                                                user: user, data: result, data2: empleado, data3: result2, data7: 'false', empleadoId: empleadoId, activos: result33
+                                                 data: result, data2: empleado, data3: result2, data7: 'false', empleadoId: empleadoId, activos: result33
                                             });
                                         });
                                     }
@@ -427,7 +427,7 @@ controller.guardar_captura_POST = (req, res) => {
                                             if (result4[0].Activos == 0) {
 
                                                 res.render('cerrar_embarque.ejs', {
-                                                    user: user, empleadoId: empleadoId, embarque: embarque
+                                                     empleadoId: empleadoId, embarque: embarque
                                                 });
 
                                             } else {
@@ -435,7 +435,7 @@ controller.guardar_captura_POST = (req, res) => {
                                                 funcion.controllerCountCierre(idembarque, (err, result33) => {
                                                     if (err) throw err;
                                                     res.render('capturar_embarque.ejs', {
-                                                        user: user, data: result, data2: empleado, data3: result2, data7: 'false', empleadoId: empleadoId, activos: result33
+                                                       data: result, data2: empleado, data3: result2, data7: 'false', empleadoId: empleadoId, activos: result33
                                                     });
                                                 });
                                             }
@@ -450,11 +450,11 @@ controller.guardar_captura_POST = (req, res) => {
         });
 
 
-    } else {
-        res.render('acceso_denegado.ejs', {
-            user: user
-        });
-    }
+    // } else {
+    //     res.render('acceso_denegado.ejs', {
+    //         user: user
+    //     });
+    // }
 };
 
 controller.embarque_info_POST = (req, res) => {
@@ -908,7 +908,7 @@ controller.eliminar_notificar_POST = (req, res) => {
 
 controller.cerrar_embarque_POST = (req, res) => {
 
-    let user = req.connection.user
+    //let user = req.connection.user
     empleado = req.body.idempleado
     embarque = req.body.embarque
     caja = req.body.caja
@@ -935,7 +935,7 @@ controller.cerrar_embarque_POST = (req, res) => {
             funcion.controllerCountActivoStatusAll((err, result2) => {
                 if (err) throw err;
                 res.render('embarques.ejs', {
-                    user: user, data: result5, empleado: empleadoId, data2: result2
+                     data: result5, empleado: empleadoId, data2: result2
                 });
             });
         });
@@ -985,7 +985,7 @@ controller.revisar_cierre_POST = (req, res) => {
 
     /*
     if(embString.includes("#")){
-         emb=embString.replace("#","")         
+         emb=embString.replace("#","")
       }else{
          emb=embarque;
       }
@@ -1006,13 +1006,13 @@ controller.revisar_cierre_POST = (req, res) => {
 controller.cierre_directo_POST = (req, res) => {
 
 
-    let user = req.connection.user
+   // let user = req.connection.user
     embarque = req.body.embarque
     empleadoId = req.body.idempleado
 
 
     res.render('cerrar_embarque.ejs', {
-        user: user, empleadoId: empleadoId, embarque: embarque
+        empleadoId: empleadoId, embarque: embarque
     });
 
 }
@@ -1026,8 +1026,8 @@ controller.consulta_serial_GET = (req, res) => {
     funcion.getSerial(serial)
         .then((result) => {
 
-            if(result.length>0){res.send("found")}else{res.send("notfound")}  
-                           
+            if(result.length>0){res.send("found")}else{res.send("notfound")}
+
             })
         .catch((err) => { console.log(err) })
 
@@ -1069,7 +1069,7 @@ controller.getDelivery_POST = (req, res) => {
             })
 
     }
-    waitForPromise() 
+    waitForPromise()
 }
 
 
@@ -1140,7 +1140,7 @@ controller.getTotalQty_POST = (req, res) => {
     let embarque = req.body.embarque
 
     funcion.getTotalQty(embarque)
-        .then((result) => { 
+        .then((result) => {
             res.json(result) })
         .catch((err) => { console.error(err) })
 }
@@ -1153,7 +1153,7 @@ controller.getDeliveryInfo_POST = (req, res) => {
     let embarque = req.body.embarque
 
     funcion.getDelivery(embarque)
-        .then((result) => { 
+        .then((result) => {
             res.json(result) })
         .catch((err) => { console.error(err) })
 }
@@ -1165,7 +1165,7 @@ controller.checkSingle_POST = (req, res) => {
     let single = req.body.single
 
     funcion.checkSingle(master,single)
-        .then((result) => { 
+        .then((result) => {
             res.json(result) })
         .catch((err) => { console.error(err) })
 }
