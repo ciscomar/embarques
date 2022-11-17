@@ -31,7 +31,7 @@ router.post('/guardar_notificar', middleware.sspi, routesController.guardar_noti
 router.post('/eliminar_notificar', middleware.sspi, routesController.eliminar_notificar_POST);
 router.post('/cerrar_embarque',  routesController.cerrar_embarque_POST);
 router.post('/revisar_cierre', middleware.sspi, routesController.revisar_cierre_POST);
-router.post('/cierre_directo', middleware.sspi, routesController.cierre_directo_POST);
+router.post('/cierre_directo', routesController.cierre_directo_POST);
 router.get('/consulta_serial/:id', middleware.sspi, routesController.consulta_serial_GET);
 router.post('/getDelivery',  routesController.getDelivery_POST);
 router.post('/getTotalQty',  routesController.getTotalQty_POST);
