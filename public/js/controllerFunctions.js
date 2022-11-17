@@ -86,7 +86,7 @@ funcion.controllerTablaEmbarques = (callback) => {
 
 funcion.controllerTablaEmbarquesActivo = (callback) => {
     db.query(`SELECT programa_embarque, programa_cliente, programa_fecha, programa_emp FROM embarque_programa, embarque_cierre 
-    WHERE embarque_programa.programa_embarque= embarque_cierre.embarque AND(embarque_programa.programa_fecha> "2022-01-01")
+    WHERE embarque_programa.programa_embarque= embarque_cierre.embarque AND(embarque_programa.programa_fecha> "2022-11-01")
     AND (embarque_programa.programa_status='Activo'
     || embarque_cierre.caja='Sin Registro')
      GROUP BY(embarque_programa.programa_embarque)`, function (err, result, fields) {
