@@ -25,6 +25,7 @@ app.set('view_engine', 'ejs');
 
 //Carpeta publica
 app.use(express.static('public'));
+app.use(express.static('D:\\DEL\\embarques')); 
 //Requiriendo rutas
 const routes = require('./routes/routes');
 app.use(express.static('node_modules'))

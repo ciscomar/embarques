@@ -917,13 +917,13 @@ controller.cerrar_embarque_POST = (req, res) => {
 
     //Upload image to folder upload-temp
     let fileUploader = req.files.fileUploader;
-    fileUploader.mv('./public/temp/' + embarque + '.jpg', function (err) {
+    fileUploader.mv('D:/DEL/embarques' + embarque + '.jpg', function (err) {
         if (err)
             return res.status(500).send(err);
     });
 
-    funcion.Compress((err, res) => {
-    });
+    // funcion.Compress((err, res) => {
+    // });
 
 
 
