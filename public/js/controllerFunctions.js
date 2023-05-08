@@ -9,31 +9,31 @@ var schedule = require('node-schedule');
 const db = require('../db/conn');
 const dbP = require('../db/connP');
 
-funcion.sendEmail = (dataEmail) => {
+// funcion.sendEmail = (dataEmail) => {
 
-    //Enviar Correos
-    app.mailer.send('email.ejs', {
+//     //Enviar Correos
+//     app.mailer.send('email.ejs', {
 
-        //Info General
-        to: dataEmail.to,
-        cc: dataEmail.cc,
-        subject: dataEmail.subject,
-        seriales: dataEmail.seriales,
-        empleado: dataEmail.empleado,
-        empleadoCaptura: dataEmail.empleadoCaptura,
-        cliente: dataEmail.cliente,
-        caja: dataEmail.caja,
-        comentario: dataEmail.comentario,
+//         //Info General
+//         to: dataEmail.to,
+//         cc: dataEmail.cc,
+//         subject: dataEmail.subject,
+//         seriales: dataEmail.seriales,
+//         empleado: dataEmail.empleado,
+//         empleadoCaptura: dataEmail.empleadoCaptura,
+//         cliente: dataEmail.cliente,
+//         caja: dataEmail.caja,
+//         comentario: dataEmail.comentario,
 
-    }, function (err) {
-        if (err) {
-            console.log(err)
-            return;
-        }
-        console.log('mail sent')
-    });
+//     }, function (err) {
+//         if (err) {
+//             console.log(err)
+//             return;
+//         }
+//         console.log('mail sent')
+//     });
 
-}
+// }
 
 
 funcion.controllerClientes = (callback) => {

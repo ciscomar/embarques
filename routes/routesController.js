@@ -962,8 +962,8 @@ controller.cerrar_embarque_POST = (req, res) => {
                         to, cc, subject, seriales, empleado, empleadoCaptura, cliente, caja, comentario
                     }
 
-                    funcion.sendEmail(dataEmail);
-                    console.log(dataEmail)
+                    // funcion.sendEmail(dataEmail);
+                    // console.log(dataEmail)
                 }
 
             });
