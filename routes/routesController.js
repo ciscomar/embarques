@@ -5,6 +5,7 @@ const controller = {};
 const funcion = require('../public/js/controllerFunctions');
 const funcionE = require('../public/js/empleadosFunctions');
 const fileUpload = require('express-fileupload');
+const axios = require('axios');
 
 // Index GET
 controller.index_GET = (req, res) => {
@@ -1044,9 +1045,9 @@ controller.consulta_serial_GET = (req, res) => {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-let amqp = require('amqplib/callback_api');
-const { v4: uuidv4 } = require('uuid');
-let estacion = uuidv4();
+// let amqp = require('amqplib/callback_api');
+// const { v4: uuidv4 } = require('uuid');
+// let estacion = uuidv4();
 
 
 controller.getDelivery_POST = (req, res) => {
@@ -1054,83 +1055,109 @@ controller.getDelivery_POST = (req, res) => {
     let qty= req.body.qty
     let embarque= req.body.embarque
 
+    
+    // let send = `{
+    //     "delivery":"${delivery}",
+    //     "qty": "${qty}",
+    //     "embarque":"${embarque}",
+    // }`
 
+    let send = `{
+        "delivery":"${delivery}",
+        "stock":"${qty}",
+        "embarque":"${embarque}"
+    }`
 
-    async function waitForPromise() {
-
-        let process = "shipment_delivery"
-        let send = `{"station":"${estacion}","serial_num":"","delivery":"${delivery}","cantidad":"${qty}","process":"${process}", "material":"","embarque":"${embarque}"}`
-        amqpRequest(send)
-            .then(result => {
-                res.json(result)
-            })
-            .catch(err => {
-                console.error(err);
-            })
-
-    }
-    waitForPromise()
-}
-
-
-
-
-
-function amqpRequest(data) {
-    return new Promise((resolve, reject) => {
-        let send = data
-        let args = process.argv.slice(2);
-        let estacion = data.station
-        if (args.length == 0) {
-            // console.info("Usage: rpc_client.js num");
-            // process.exit(1);
-        }
-
-        console.log(process.env.RMQ_USER);
-        amqp.connect(`amqp://${process.env.RMQ_USER}:${process.env.RMQ_PASS}@${process.env.RMQ_SERVER}`, function (error0, connection) {
-            if (error0) {
-                // throw error0;
-                reject(error0)
-            }
-            connection.createChannel(function (error1, channel) {
-                if (error1) {
-                    // throw error1;
-                    reject(error1)
-                }
-                channel.assertQueue('', {
-                    exclusive: true
-                }, function (error2, q) {
-                    if (error2) {
-                        // throw error2;
-                        reject(error2)
-                    }
-                    let correlationId = estacion;
-                    console.info(' [x] Requesting: ', send);
-
-                    channel.consume(q.queue, function (msg) {
-                        if (msg.properties.correlationId == correlationId) {
-                            console.info(' [x] Response:   ', msg.content.toString());
-                            resolve(msg.content.toString())
-                            setTimeout(function () {
-                                connection.close();
-                                // process.exit(0)
-                            }, 500);
-
-                        }
-                    }, {
-                        noAck: true
-                    });
-
-                    channel.sendToQueue('rpc_ship',
-                        Buffer.from(send.toString()), {
-                        correlationId: correlationId,
-                        replyTo: q.queue
-                    });
-                });
-            });
-        });
+    
+    axios({
+        method: 'post',
+        url: `http://${process.env.API_ADDRESS}:5000/shipment_delivery`,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: send
     })
+        .then(result => { res.send(result.data) })
+        .catch(err => { res.json(JSON.stringify(err)) })
+
+
+
+
+    // async function waitForPromise() {
+
+    //     let process = "shipment_delivery"
+    //     let send = `{"station":"${estacion}","serial_num":"","delivery":"${delivery}","cantidad":"${qty}","process":"${process}", "material":"","embarque":"${embarque}"}`
+    //     amqpRequest(send)
+    //         .then(result => {
+    //             res.json(result)
+    //         })
+    //         .catch(err => {
+    //             console.error(err);
+    //         })
+
+    // }
+    // waitForPromise()
 }
+
+
+
+
+
+// function amqpRequest(data) {
+//     return new Promise((resolve, reject) => {
+//         let send = data
+//         let args = process.argv.slice(2);
+//         let estacion = data.station
+//         if (args.length == 0) {
+//             // console.info("Usage: rpc_client.js num");
+//             // process.exit(1);
+//         }
+
+//         console.log(process.env.RMQ_USER);
+//         amqp.connect(`amqp://${process.env.RMQ_USER}:${process.env.RMQ_PASS}@${process.env.RMQ_SERVER}`, function (error0, connection) {
+//             if (error0) {
+//                 // throw error0;
+//                 reject(error0)
+//             }
+//             connection.createChannel(function (error1, channel) {
+//                 if (error1) {
+//                     // throw error1;
+//                     reject(error1)
+//                 }
+//                 channel.assertQueue('', {
+//                     exclusive: true
+//                 }, function (error2, q) {
+//                     if (error2) {
+//                         // throw error2;
+//                         reject(error2)
+//                     }
+//                     let correlationId = estacion;
+//                     console.info(' [x] Requesting: ', send);
+
+//                     channel.consume(q.queue, function (msg) {
+//                         if (msg.properties.correlationId == correlationId) {
+//                             console.info(' [x] Response:   ', msg.content.toString());
+//                             resolve(msg.content.toString())
+//                             setTimeout(function () {
+//                                 connection.close();
+//                                 // process.exit(0)
+//                             }, 500);
+
+//                         }
+//                     }, {
+//                         noAck: true
+//                     });
+
+//                     channel.sendToQueue('rpc_ship',
+//                         Buffer.from(send.toString()), {
+//                         correlationId: correlationId,
+//                         replyTo: q.queue
+//                     });
+//                 });
+//             });
+//         });
+//     })
+// }
 
 
 

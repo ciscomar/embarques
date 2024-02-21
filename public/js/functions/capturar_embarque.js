@@ -1,5 +1,4 @@
 
-
 let delivery_form = document.getElementById("delivery_form")
 let single_form = document.getElementById("single_form")
 let delivery = document.getElementById("delivery")
@@ -54,7 +53,7 @@ function sendDelivery(e) {
                 $('#modalSpinner').modal('hide')
             }, 1000);
 
-            response = JSON.parse(result.data)
+            response = result.data
             if(response.error != "N/A")
             {
                 setTimeout(function () {
