@@ -3,11 +3,23 @@
 <% include ./static/navbar %>
 
 
-<div class="col-md-10 col-lg-10-2 col-xl-11">
+<div class="col-md-10 col-lg-10 col-xl-10">
     <div class="row">
         <div class="box-header col-lg-6">
             <br>
             <h3 class="box-title" id="tituloEmbarque">Capturar Embarque: #<%=data[0].programa_embarque%></h3>
+
+
+        </div>
+
+        <div class="box-header col-lg-1 text-center">
+            <br>
+
+          
+
+
+        </div>
+        <div class="box-header col-lg-5">
 
 
         </div>
@@ -30,6 +42,13 @@
                         <input type="text" class="form-control" id="embarque" name="embarque"
                             value="<%=data[0].programa_embarque%>" hidden>
                     </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="text-center mt-4 mb-4">
+                        <button type="button" class="btn btn-primary" id="deliveryButton"   onClick="openDelivery()" hidden>Delivery</button>
+                    </div>
+                   
+                </div>
                 </div>
             </form>
 
@@ -257,6 +276,13 @@
               </div>
             </form>
 
+            <div class="modal-footer" id="finalizarbtn" hidden>
+                <button type="submit" class="btn btn-success btn-block mr-auto" id="btnModalFinalizar"
+                  onClick="finalizar()" data-dismiss="modal"><span class="text-white fas fa-times-circle"></span>
+                  Finalizar</button>
+  
+  
+              </div>
 
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary btn-block mr-auto" id="btnModalTerminar"
@@ -704,7 +730,7 @@ aria-hidden="true">
                             msg.classList.add('text-success');
                             seriali.classList.add('border-success');
 
-                            if(clientePr=="BMW"){
+                            if(clientePr=="BMW" || clientePr=="FORD"){
                                 $('#modalSingle').modal({ backdrop: 'static', keyboard: false })
                                 setTimeout(function () {
                     $('#single').focus()

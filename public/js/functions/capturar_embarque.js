@@ -13,7 +13,7 @@ let foundDelivery
 $(document).ready(function () {
 
 
-    if(clientePr==="BMW"){
+    if(clientePr==="BMW" || clientePr==="FORD"){
         $('#lblsingle2').hide();
         getDelivery()
     }else{
@@ -21,6 +21,11 @@ $(document).ready(function () {
         setTimeout(function () {
             $('#serial').focus()
         }, 500)
+    }
+
+    if(clientePr==="FORD"){
+        $('#deliveryButton').attr("hidden",false)
+
     }
 
     
@@ -64,10 +69,19 @@ function sendDelivery(e) {
       
             }else{
 
-                setTimeout(function () {
-                    $('#modalSuccessDelivery').modal({ backdrop: 'static', keyboard: false })
-                }, 500);
+                if(clientePr==="BMW" ){
+                    setTimeout(function () {
+                        $('#modalSuccessDelivery').modal({ backdrop: 'static', keyboard: false })
+                    }, 500);
+                }else if(clientePr==="FORD"){
 
+                 
+                     $('#modalScanDelivery').modal({ backdrop: 'static', keyboard: false })
+                    $('#finalizarbtn').attr("hidden",false)
+
+                }
+
+                $('#delivery').val("")
             }
 
         })
@@ -125,15 +139,16 @@ function getDelivery() {
 
             if (foundDelivery == 0) {
                 $('#modalScanDelivery').modal({ backdrop: 'static', keyboard: false })
-
-              
+             
                 setTimeout(function () {
                     $('#delivery').focus()
                 }, 500);
                 getTotal()
             }else{
+
             $('#modalScanDelivery').attr("hidden",true)
             $('#modalScanDelivery').remove()
+            
 
             }
 
@@ -227,9 +242,53 @@ function closeError() {
 
 
 
+function finalizar() {
 
+    $('#delivery').val("")
+    $('#modalScanDelivery').modal({ backdrop: 'static', keyboard: false })
 
+}
 
+function openDelivery() {
+    var newModal = $(
+        `<div class="modal fade animate__animated animate__zoomInDown" id="modalScanDelivery" tabindex="-1" role="dialog"
+         aria-labelledby="modelTitleId" aria-hidden="true">
+         <div class="modal-dialog">
+           <div class="modal-content">
+             <div class="modal-body text-center">
+               <h5 id="tituloSuccess"><span class="text-info  fas fa-truck"></span> Delivery </h5>
+               <p id="cantidadSuccess" style="font-size: x-large"></p>
+             </div>
+    
+             <form id="delivery_form">
+               <div class="col-12 col-lg-12 text-center mb-2">
+                 <input type="text" class="form-control" name="delivery" id="delivery" autocomplete="off">
+               </div>
+             </form>
+    
+             <div class="modal-footer" id="finalizarbtn" hidden>
+                 <button type="submit" class="btn btn-success btn-block mr-auto" id="btnModalFinalizar"
+                   onClick="finalizar()" data-dismiss="modal"><span class="text-white fas fa-times-circle"></span>
+                   Finalizar</button>
+             </div>
+    
+             <div class="modal-footer">
+               <button type="submit" class="btn btn-primary btn-block mr-auto" id="btnModalTerminar"
+                 onClick="cancel()" data-dismiss="modal"><span class="text-white fas fa-times-circle"></span>
+                 Cancelar</button>
+             </div>
+           </div>
+         </div>
+       </div>`
+    );
+
+    $('body').append(newModal);
+    $('#delivery').val("")
+    $('#finalizarbtn').attr("hidden",false)
+
+    $('#modalScanDelivery').modal({ backdrop: 'static', keyboard: false })
+
+}
 
 
 function cancel() {
