@@ -2191,6 +2191,12 @@ aria-hidden="true">
                         c = $('#cantidad').val();
                         if (p != "" && s != "" && c != "") {
 
+                            if( clientePr=="FORD"){
+                                e.preventDefault()
+                                $('#modalSingle').modal({ backdrop: 'static', keyboard: false })
+                                setTimeout(function () {$('#single').focus()}, 500);
+                            }
+
                             $('#btnguardar').prop("disabled", false);
                             msg.innerHTML = '';
                             $('#lblparte2').hide();
