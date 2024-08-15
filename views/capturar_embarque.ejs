@@ -43,12 +43,12 @@
                             value="<%=data[0].programa_embarque%>" hidden>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                     <div class="text-center mt-4 mb-4">
                         <button type="button" class="btn btn-primary" id="deliveryButton"   onClick="openDelivery()" hidden>Delivery</button>
                     </div>
                    
-                </div>
+                </div> -->
                 </div>
             </form>
 
@@ -276,10 +276,10 @@
               </div>
             </form>
 
-            <div class="modal-footer" id="finalizarbtn" hidden>
+            <div class="modal-footer" id="finalizarbtn">
                 <button type="submit" class="btn btn-success btn-block mr-auto" id="btnModalFinalizar"
-                  onClick="finalizar()" data-dismiss="modal"><span class="text-white fas fa-times-circle"></span>
-                  Finalizar</button>
+                  onClick="Enviar()" data-dismiss="modal"><span class="text-white fas fa-check"></span>
+                  Enviar</button>
   
   
               </div>

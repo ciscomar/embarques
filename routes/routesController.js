@@ -1055,6 +1055,7 @@ controller.getDelivery_POST = (req, res) => {
     let qty= req.body.qty
     let embarque= req.body.embarque
 
+
     
     // let send = `{
     //     "delivery":"${delivery}",
@@ -1071,7 +1072,7 @@ controller.getDelivery_POST = (req, res) => {
     
     axios({
         method: 'post',
-        url: `http://${process.env.API_ADDRESS}:5000/shipment_delivery`,
+        url: `http://${process.env.API_ADDRESS}:5000/shipment_multiple_delivery`,
         headers: {
             'Content-Type': 'application/json'
         },
