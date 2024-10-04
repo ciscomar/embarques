@@ -930,7 +930,7 @@ aria-hidden="true">
                     var parteT = document.getElementById("parte");
                     serial = <%- JSON.stringify(data3) %>;
                     //console.log(infoArray)
-                    if (infoArray.length == 9 || infoArray.length == 10 || infoArray.length == 11 || infoArray.length == 12) {//GM MASTER Y B10
+                    if (infoArray.length == 9 || infoArray.length == 10 || (infoArray.length == 11 && (infoArray[3].startsWith("6JUN") || infoArray[3].startsWith("1JUN"))) || infoArray.length == 12) {//GM MASTER Y B10
 
                         if (infoArray[3].startsWith("6JUN")) { //Master
                             $('#parte').val(infoArray[1].substring(1));
@@ -1240,14 +1240,14 @@ aria-hidden="true">
                         ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-                    } else if (infoArray.length == 8) {//FORD
+                    } else if (infoArray.length == 11 && infoArray[11].startsWith("S")) {//FORD
                         var partes
                         var qty
                         var serial
 
                         $('#parte').val(infoArray[1].substring(1));
                         $('#cantidad').val(infoArray[2].substring(1));
-                        $('#serial').val(infoArray[7].substring(1));
+                        $('#serial').val(infoArray[11].substring(1));
 
 
                         partes = $('#parte').val()
@@ -1766,7 +1766,7 @@ aria-hidden="true">
                     var parteT = document.getElementById("parte");
                     serial = <%- JSON.stringify(data3) %>;
                     // console.log(infoArray)
-                    if (infoArray.length == 9 || infoArray.length == 10 || infoArray.length == 11 || infoArray.length == 12) {//GM MASTER Y B10
+                    if (infoArray.length == 9 || infoArray.length == 10 ||  (infoArray.length == 11 && (infoArray[3].startsWith("6JUN") || infoArray[3].startsWith("1JUN"))) || infoArray.length == 12) {//GM MASTER Y B10
 
                         if (infoArray[3].startsWith("6JUN")) { //Master
                             $('#parte').val(infoArray[1].substring(1));
@@ -2076,7 +2076,7 @@ aria-hidden="true">
                         ///////////MASTER FORD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-                    } else if (infoArray.length == 8) {//FORD
+                    } else if (infoArray.length == 11 && infoArray[11].startsWith("S")) {//FORD
                         
                         var partes
                         var qty
@@ -2084,7 +2084,7 @@ aria-hidden="true">
 
                         $('#parte').val(infoArray[1].substring(1));
                         $('#cantidad').val(infoArray[2].substring(1));
-                        $('#serial').val(parseInt(infoArray[7].substring(1)));
+                        $('#serial').val(parseInt(infoArray[11].substring(1)));
 
 
                         partes = $('#parte').val()
