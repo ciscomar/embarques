@@ -683,14 +683,19 @@ aria-hidden="true">
             let foundS = false;
             if (idS != "") {
                 /////B10 y BMWV TODAY
-                if (idS[0] == "S" || idS[0] == "s" || (idS[0] == "1" && (idS[1] == "s" || idS[1] == "S"))) {
-
-                    if(idS[0] == "S" || idS[0] == "s"){
-                        var id = ($('#serial').val()).substr(1)
-                    }else{
-                        var id = parseInt($('#serial').val().substr(9),36)
-                        console.log(id);
+                                    if (
+                    idS[0] == "S" || idS[0] == "s" || 
+                    idS[0] == "M" || idS[0] == "m" || 
+                    (idS[0] == "1" && (idS[1] == "s" || idS[1] == "S" || idS[1] == "m" || idS[1] == "M"))
+                    ) {
+                        if (idS[0] == "S" || idS[0] == "s" || idS[0] == "M" || idS[0] == "m") {
+                            var id = ($('#serial').val()).substr(1);
+                        } else {
+                            var id = parseInt($('#serial').val().substr(9), 36);
+                            console.log(id);
+                        }
                     }
+
                     
                     //1S30817122Z4FO6
 
